@@ -60,35 +60,25 @@ public class Main {
 				while (search.readRecord()) {
 					if (txt.equals(search.get("LOGIN"))) {
 						if (ask.equals(search.get("PASSWORD"))) {
-							switch (Integer.parseInt(search.get("TYPE"))) {
-							case 0:
+							if (search.get("TYPE").equals("Administrator")) {
 								frmLogowanie.dispose();
-								Administrator log = new Administrator(
+								Administrator login = new Administrator(
 										search.get(0), search.get(2),
 										search.get(3), Occupation.ADMINISTRATOR);
-								log.run();
-								
+								login.run();
 								System.out.println("admin");
-								break;
+							}
 
-							case 1:
+							else if (search.get("TYPE").equals("Lekarz")) {
 								System.out.println("lekarz");
-								break;
+							}
 
-							case 2:
+							else if (search.get("TYPE").equals("Pielęgniarka")) {
 								System.out.println("pielegniarka");
-								break;
+							}
 
-							case 3:
+							else if (search.get("TYPE").equals("Supercieć")) {
 								System.out.println("superciec");
-								break;
-
-							case 4:
-								System.out.println("pacjent");
-								break;
-
-							default:
-								System.out.println("blad");
 							}
 
 						}
@@ -111,7 +101,7 @@ public class Main {
 	private void initialize() {
 		frmLogowanie = new JFrame();
 		frmLogowanie.setTitle("Logowanie");
-		frmLogowanie.setBounds(100, 100, 400, 149);
+		frmLogowanie.setBounds(600, 300, 400, 149);
 		frmLogowanie.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		SpringLayout springLayout = new SpringLayout();
 		frmLogowanie.getContentPane().setLayout(springLayout);

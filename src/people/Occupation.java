@@ -11,9 +11,6 @@ enum Type{
 	LOGIN, PASSWORD;
 }
 
-/*
- * a tu zebym pamietal ze pracownicy maja dzialac w tej metodzie
- */
 interface accW{
 	public void run();
 }
