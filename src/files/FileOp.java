@@ -5,8 +5,10 @@ import java.lang.reflect.Field;
 
 public class FileOp {
 	private Writable object;
+	private Redable objectR;
 	private String sep = "$|$";
 	private String sep2 = "$$";
+	private String[] fields;
 	private String encoding = "none"; 
 	private StringBuilder toSave = new StringBuilder();
 	
@@ -16,15 +18,28 @@ public class FileOp {
 		toSave.append(sep + "\n" + encoding + "\n");
 	}
 	
+	private FileOp(Redable object)
+	{
+		this.objectR = object;
+		
+	}
+	
 	public static boolean save(Writable object)
 	{
 		FileOp file = new FileOp(object);
 		return file.saveObj();
 	}
 	
+	public static boolean read(Redable object)
+	{
+		FileOp file = new FileOp(object);
+		file.readObj();
+		return true;
+	}
+	
 	protected boolean saveObj()
 	{
-		String[] fields = object.fieldsToSave();
+		this.fields = object.fieldsToSave();
 		StringBuilder line = new StringBuilder();
 		//budowanie nagłówka pliku
 		for(String f: fields)
@@ -62,16 +77,36 @@ public class FileOp {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+				
+		//System.out.println(toSave);
+		return true;
+	}
+	
+	protected boolean readObj()
+	{
+		String values[];
 		try {
 			DataInputStream file = new DataInputStream(new BufferedInputStream(new FileInputStream("data.txt")));
-			System.out.println(file.readUTF());
+			values = file.readUTF().split("\n");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
 		
-		//System.out.println(toSave);
+		this.sep = values[0];
+		this.encoding = values[1];
+		
+		if(values[2] == "}" && values[values.length] == "}")
+		{
+			this.readfields(objectR, 3, values.length, values);
+		}
+		
+		return true;
+	}
+	
+	protected boolean readfields(Redable object, int start, int end, String[] values)
+	{
+		this.checkHeader();
 		return true;
 	}
 }
