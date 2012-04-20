@@ -2,9 +2,14 @@ package files;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class FileOp {
 	private Writable object;
+	private Collection objectCollection;
 	private Redable objectR;
 	private String sep = "$|$";
 	private String sep2 = "$$";
@@ -18,16 +23,46 @@ public class FileOp {
 		toSave.append(sep + "\n" + encoding + "\n");
 	}
 	
+	private FileOp(Collection object) { 
+		this.objectCollection = object;
+		//dodajemy na początek pliku typ szyfrowania i separator pól
+		toSave.append(sep + "\n" + encoding + "\n");
+	}
+	
 	private FileOp(Redable object)
 	{
 		this.objectR = object;
-		
+
 	}
 	
 	public static boolean save(Writable object)
 	{
 		FileOp file = new FileOp(object);
-		return file.saveObj();
+		file.saveObj(object);
+		
+		try {
+			DataOutputStream fileF = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data.txt")));
+			fileF.writeUTF(file.toSave.toString());
+			fileF.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	public static boolean save(Collection object)
+	{
+		FileOp file = new FileOp(object);
+		file.saveCollection(object);
+		
+		try {
+			DataOutputStream fileF = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data.txt")));
+			fileF.writeUTF(file.toSave.toString());
+			fileF.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 	
 	public static boolean read(Redable object)
@@ -37,7 +72,19 @@ public class FileOp {
 		return true;
 	}
 	
-	protected boolean saveObj()
+	protected boolean saveCollection(Collection object)
+	{
+		toSave.append("[\n");
+		for(Object i: object)
+		{
+			if(!(i instanceof Writable)) return false;
+			this.saveObj((Writable) i);
+		}
+		toSave.append("]\n");
+		return true;
+	}
+	
+	protected boolean saveObj(Writable object)
 	{
 		this.fields = object.fieldsToSave();
 		StringBuilder line = new StringBuilder();
@@ -52,7 +99,7 @@ public class FileOp {
 		toSave.append(line);
 		// budowanie wartości pól
 		line = new StringBuilder();
-		Class<?> objectC = this.object.getClass();
+		Class<?> objectC = object.getClass();
 		for(String f: fields)
 		{
 			if(line.length() != 0) line.append(sep);
@@ -68,16 +115,7 @@ public class FileOp {
 		}
 		// koniec obiektu
 		line.append("\n}\n");
-		toSave.append(line);
-		
-		try {
-			DataOutputStream file = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data.txt")));
-			file.writeUTF(toSave.toString());
-			file.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-				
+		toSave.append(line);	
 		//System.out.println(toSave);
 		return true;
 	}
@@ -96,9 +134,18 @@ public class FileOp {
 		this.sep = values[0];
 		this.encoding = values[1];
 		
-		if(values[2] == "}" && values[values.length] == "}")
+		if(values[2].contentEquals("{") && values[values.length-1].contentEquals("}"))
 		{
-			this.readfields(objectR, 3, values.length, values);
+			if(this.readfields(objectR, 3, values.length-1, values))
+			{
+				System.out.println("Poprawny odczyt");
+				return true;
+			} else {
+				System.out.println("Nie można dokonać odczytu");
+				return false;
+			}
+		} else {
+			System.out.println("Read error" + values[values.length-1]);
 		}
 		
 		return true;
@@ -106,7 +153,34 @@ public class FileOp {
 	
 	protected boolean readfields(Redable object, int start, int end, String[] values)
 	{
-		this.checkHeader();
+		if(!this.checkHeader(values[start], object)) return false;
+		String[] v = values[start+1].split(Pattern.quote(this.sep));
+		Class<?> objectC = object.getClass();
+		for(int i=0; i<v.length; i++)
+		{
+			try {
+				Field ps = objectC.getDeclaredField(this.fields[i]);
+				ps.setAccessible(true);
+				ps.set(object, v[i]);
+			}
+			catch(Exception e)
+			{
+				System.out.println("Nie udało się ustawić pola: " + this.fields[i]);
+			}
+		}
+		
+		return true;
+	}
+	
+	protected boolean checkHeader(String values, Redable object)
+	{
+		this.fields = object.fieldsToSave();
+		String[] splitVals = values.split(Pattern.quote(this.sep));
+		List<String> fields = Arrays.asList(this.fields);
+		for(String i : splitVals)
+		{
+			if(fields.indexOf(i) == -1) return false;
+		}
 		return true;
 	}
 }
