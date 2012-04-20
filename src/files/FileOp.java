@@ -23,25 +23,27 @@ public class FileOp {
 		toSave.append(sep + "\n" + encoding + "\n");
 	}
 	
-	private FileOp(Collection object) { 
+	private FileOp(Collection object, String operation) {
 		this.objectCollection = object;
-		//dodajemy na początek pliku typ szyfrowania i separator pól
-		toSave.append(sep + "\n" + encoding + "\n");
+		if(operation == "write")
+		{
+			//	dodajemy na początek pliku typ szyfrowania i separator pól
+			toSave.append(sep + "\n" + encoding + "\n");
+		}
 	}
 	
 	private FileOp(Redable object)
 	{
 		this.objectR = object;
-
 	}
 	
-	public static boolean save(Writable object)
+	public static boolean save(Writable object, String src)
 	{
 		FileOp file = new FileOp(object);
 		file.saveObj(object);
 		
 		try {
-			DataOutputStream fileF = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data.txt")));
+			DataOutputStream fileF = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/"+src)));
 			fileF.writeUTF(file.toSave.toString());
 			fileF.close();
 		} catch (IOException e) {
@@ -50,13 +52,13 @@ public class FileOp {
 		return true;
 	}
 	
-	public static boolean save(Collection object)
+	public static boolean save(Collection object, String src)
 	{
-		FileOp file = new FileOp(object);
+		FileOp file = new FileOp(object, "write");
 		file.saveCollection(object);
 		
 		try {
-			DataOutputStream fileF = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data.txt")));
+			DataOutputStream fileF = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/"+src)));
 			fileF.writeUTF(file.toSave.toString());
 			fileF.close();
 		} catch (IOException e) {
@@ -65,10 +67,17 @@ public class FileOp {
 		return true;
 	}
 	
-	public static boolean read(Redable object)
+	public static boolean read(Redable object, String src)
 	{
 		FileOp file = new FileOp(object);
-		file.readObj();
+		file.readObj(src);
+		return true;
+	}
+	
+	public static boolean read(Collection object, String src)
+	{
+		FileOp file = new FileOp(object, "read");
+		file.readCollection(src);
 		return true;
 	}
 	
@@ -89,10 +98,10 @@ public class FileOp {
 		this.fields = object.fieldsToSave();
 		StringBuilder line = new StringBuilder();
 		//budowanie nagłówka pliku
+		toSave.append("{\n"+object.getClassToSave()+"\n");
 		for(String f: fields)
 		{
 			if(line.length() != 0) line.append(sep);
-			else line.append("{\n");
 			line.append(f);
 		}
 		line.append("\n");
@@ -114,17 +123,62 @@ public class FileOp {
 			}
 		}
 		// koniec obiektu
-		line.append("\n}\n");
+		line.append("\n}");
 		toSave.append(line);	
 		//System.out.println(toSave);
 		return true;
 	}
 	
-	protected boolean readObj()
+	protected boolean readCollection(String src)
 	{
 		String values[];
 		try {
-			DataInputStream file = new DataInputStream(new BufferedInputStream(new FileInputStream("data.txt")));
+			DataInputStream file = new DataInputStream(new BufferedInputStream(new FileInputStream("data/"+src)));
+			values = file.readUTF().split("\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		this.sep = values[0];
+		this.encoding = values[1];
+		
+		for(int i=4; i<values.length; )
+		{
+			try {
+				Redable obiekt = (Redable)Class.forName(values[i++]).newInstance();
+				if(!this.checkHeader(values[i++], obiekt)) return false;
+				
+				String[] v = values[i++].split(Pattern.quote(this.sep));
+				Class<?> objectC = obiekt.getClass();
+				for(int j=0; j<v.length; j++)
+				{
+					try {
+						Field ps = objectC.getDeclaredField(this.fields[j]);
+						ps.setAccessible(true);
+						ps.set(obiekt, v[j]);
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+						System.out.println("Nie udało się ustawić pola: " + this.fields[j]);
+					}
+				}
+				this.objectCollection.add(obiekt);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			i++;
+		}
+		
+		return true;
+	}
+	
+	protected boolean readObj(String src)
+	{
+		String values[];
+		try {
+			DataInputStream file = new DataInputStream(new BufferedInputStream(new FileInputStream("data/"+src)));
 			values = file.readUTF().split("\n");
 		} catch (IOException e) {
 			e.printStackTrace();

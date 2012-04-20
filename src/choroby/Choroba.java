@@ -16,6 +16,11 @@ public class Choroba implements Writable, Redable {
 		return this.fieldsToSave ;
 	}
 	
+	public String getClassToSave()
+	{
+		return "choroby.Choroba";
+	}
+	
 	public void setValues()
 	{
 		this.nazwa = "ddd";
@@ -47,6 +52,13 @@ public class Choroba implements Writable, Redable {
 		Choroba ch = new Choroba();
 		ch.setValues();
 		lista.add(ch);
-		FileOp.save(lista);
+		FileOp.save(lista, "choroby.txt");
+		
+		List<Choroba> choroby = new LinkedList<Choroba>();
+		FileOp.read(choroby, "choroby.txt");
+		for(Choroba f : choroby)
+		{
+			f.printValues();
+		}
 	}
 }
