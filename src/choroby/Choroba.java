@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import ciphers.Cipher;
+
 import files.*;
 
 /**
@@ -24,6 +26,8 @@ import files.*;
 public class Choroba implements Externalizable {
 	private String nazwa = "asd";
 	private String opis = "asd";
+	// Możliwe wartości to CAESAR, ROT13, ADFGVC
+	private Cipher ciph = Cipher.ADFGVC;
 	/**
 	 * Obiekty w liście też muszą być serializable lub externalizable
 	 */
@@ -148,7 +152,9 @@ public class Choroba implements Externalizable {
 	public void writeExternal(ObjectOutput out) throws IOException {
 			out.writeObject(Objawy);
 			out.writeObject(nazwa);
-			out.writeObject(opis);
+			out.writeObject(ciph.getCipher(opis));
+			System.out.println("b1:"+opis);
+			System.out.println("b:"+ciph.getCipher(opis));
 	}
 
 	/**
@@ -158,6 +164,7 @@ public class Choroba implements Externalizable {
 			ClassNotFoundException {
 			Objawy = (ArrayList<Objaw>)in.readObject();
 			nazwa = (String)in.readObject();
-			opis = (String)in.readObject();
+			opis = ciph.getDecipher((String)in.readObject());
+			System.out.println("c:"+opis);
 	}
 }
