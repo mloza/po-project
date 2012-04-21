@@ -21,7 +21,7 @@ public class Choroba implements Writable, Redable {
 		return "choroby.Choroba";
 	}
 	
-	public void setValues()
+	public void setValue()
 	{
 		this.nazwa = "ddd";
 		this.opis = "fff";
