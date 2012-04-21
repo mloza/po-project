@@ -1,8 +1,0 @@
-LOGIN,PASSWORD,TYPE,SURNAME,NAME
-"",,Administrator,nazwisko,imie
-login,haslo,Administrator,Kowalski,Jan
-lekarz,doc,Lekarz,Nowak,Marek
-piel,nurse,Pielęgniarka,Mroczek,Anna
-drugi,haselko,Supercieć,Dorota,Dariusz
-pierwszy,pass,Supercieć,Bąk,Sławomir
-doktor,med,Lekarz,Nowak,Andrzej

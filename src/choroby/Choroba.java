@@ -1,21 +1,11 @@
 package choroby;
 
-import java.io.Externalizable;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import ciphers.Cipher;
-
-import files.*;
 
 /**
  * Wszystko co potrzebne jest w mainie, jeżeli obiekt ma być odtworzony i przy odtwarzaniu ma być uruchomiony konstruktor to implementujemy interfejs Externalizable i dodajemy metody writeExternal i readExternal tak jak tutaj
