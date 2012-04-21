@@ -15,64 +15,94 @@ import java.util.List;
 
 import files.*;
 
+/**
+ * Wszystko co potrzebne jest w mainie, jeżeli obiekt ma być odtworzony i przy odtwarzaniu ma być uruchomiony konstruktor to implementujemy interfejs Externalizable i dodajemy metody writeExternal i readExternal tak jak tutaj
+ * Jeżeli konstruktor ma być pominięty to serializable i metody readObject i writeObject. Jeśli ma być bez szyfrowania itp można te motody pominąć przy serializable.
+ * @author Scroot
+ *
+ */
 public class Choroba implements Externalizable {
 	private String nazwa = "asd";
 	private String opis = "asd";
+	/**
+	 * Obiekty w liście też muszą być serializable lub externalizable
+	 */
 	protected List<Objaw> Objawy = new ArrayList<Objaw>();
 	private String[] fieldsToSave = {"nazwa", "opis"};
 	
+	/**
+	 * Konstruktor dodaje objaw do listy, dla testów
+	 */
 	public Choroba()
 	{
 		Objawy.add(new Objaw());
 	}
-	
-	public String[] fieldsToSave()
-	{
-		return this.fieldsToSave ;
-	}
-	
-	public String getClassToSave()
-	{
-		return "choroby.Choroba";
-	}
-	
+		
+	/**
+	 * Metoda ustawia wartości aby można było sprawdzić poprawnośc odczytu
+	 */
 	public void setValues()
 	{
 		this.nazwa = "ddd";
 		this.opis = "fff";
 	}
 	
+	/**
+	 * Wypisuje wartości, też dla testów
+	 */
 	public void printValues()
 	{
 		System.out.println(this.nazwa);
 	}
 	
+	/**
+	 * Przykłąd zapisu i odczytu obiektów itp
+	 * @param args
+	 */
 	public static void main(String[] args)
 	{
 		System.out.println("start");
 		
 		//FileOp2.write(new Choroba(), "choroba.txt", "none");
+		/**
+		 * Zapis pojedynczego obiektu tworzonego przy writeObject
+		 */
 		try {
 			ObjectOutputStream op = new ObjectOutputStream(new FileOutputStream("data/choroba.txt"));
 			op.writeObject(new Choroba());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		/**
+		 * Test odczytum tworze nowy obiekt domyślnie ma pola nazwa na asd ustawione
+		 */
 		Choroba testowa = new Choroba();
 		System.out.println("Przed ustawienim");
 		testowa.printValues();
+		/**
+		 * Ustawiam pole na ddd
+		 */
 		testowa.setValues();
 		System.out.println("Po ustawienum");
 		testowa.printValues();
+		/**
+		 * Wczytywanie
+		 */
 		try {
 			ObjectInputStream op = new ObjectInputStream(new FileInputStream("data/choroba.txt"));
 			testowa = (Choroba)op.readObject();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		/**
+		 * Po odczycie znów powinien mieć asd
+		 */
 		System.out.println("Po odczycie");
 		testowa.printValues();
 		
+		/**
+		 * Zapisywanie kolekcji samej
+		 */
 		List<Choroba> lista = new LinkedList<Choroba>();
 		lista.add(new Choroba());
 		Choroba ch = new Choroba();
@@ -80,6 +110,9 @@ public class Choroba implements Externalizable {
 		lista.add(ch);
 		//FileOp2.write(lista, "choroby.txt");
 		
+		/**
+		 * Zapis
+		 */
 		try {
 			ObjectOutputStream op = new ObjectOutputStream(new FileOutputStream("data/choroby.txt"));
 			op.writeObject(lista);
@@ -87,7 +120,9 @@ public class Choroba implements Externalizable {
 			e.printStackTrace();
 		}
 		
-		
+		/**
+		 * Odczyt
+		 */
 		List<Choroba> choroby = null;
 		try {
 			ObjectInputStream op = new ObjectInputStream(new FileInputStream("data/choroby.txt"));
@@ -96,6 +131,9 @@ public class Choroba implements Externalizable {
 			e.printStackTrace();
 		}
 		
+		/**
+		 * Wypisanie wyników
+		 */
 		//FileOp2.read(choroby, "choroby.txt");
 		for(Choroba f : choroby)
 		{
@@ -104,12 +142,18 @@ public class Choroba implements Externalizable {
 		
 	}
 
+	/**
+	 * Metoda sterująca zapisem, co gdzie i kiedy ma być zapisane, tutaj powinno znaleźć się też szyfrowanie które zaraz dodam
+	 */
 	public void writeExternal(ObjectOutput out) throws IOException {
 			out.writeObject(Objawy);
 			out.writeObject(nazwa);
 			out.writeObject(opis);
 	}
 
+	/**
+	 * Wczytywanie obiektu
+	 */
 	public void readExternal(ObjectInput in) throws IOException,
 			ClassNotFoundException {
 			Objawy = (ArrayList<Objaw>)in.readObject();
