@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,7 +19,6 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 import people.Administrator;
 import people.Occupation;
 
-import com.csvreader.CsvReader;
 import javax.swing.JPasswordField;
 import javax.swing.JLabel;
 

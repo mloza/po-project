@@ -1,10 +1,11 @@
 package karta;
 
+import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 import choroby.Choroba;
 
-public class Wpis {
+public class Wpis implements Serializable {
 	 
 	GregorianCalendar dateOfEntry;
 	private Choroba whatDisease;

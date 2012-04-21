@@ -1,13 +1,18 @@
 package ludzie;
-import files.*;
 
-public abstract class Person {
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+
+public abstract class Person implements Serializable {
 	public String name;
 	public String surname;
-
-	Person(String name, String surname) {
+	private Date birdthDate;
+	
+	Person(String name, String surname, Date birdthDate) {
 		this.setName(name);
 		this.setSurname(surname);
+		this.setBirdthDate(birdthDate);
 	}
 
 	public String getName() {
@@ -26,4 +31,11 @@ public abstract class Person {
 		this.surname = surname;
 	}
 
+	public Date getBirdthDate() {
+		return birdthDate;
+	}
+
+	public void setBirdthDate(Date birdthDate) {
+		this.birdthDate = birdthDate;
+	}
 }
