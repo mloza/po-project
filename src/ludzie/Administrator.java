@@ -1,43 +1,25 @@
 package ludzie;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.Date;
 
-public class Administrator extends Worker implements admin{
-	public Administrator(Occupation type, String name, String surname) {
-		super(type, name, surname);
+import run.Login;
+
+public class Administrator extends Person implements worker{
+	private String login;
+	public Administrator(String login, String name, String surname, Date birthDate){
+		super(name, surname, birthDate);
+		this.setLogin(login);
+		System.out.println("bangla");
+		System.out.println(Login.logIn);
 	}
 
-	public void createAcc(Occupation type, String name, String surname) throws IOException{
-		if (type == Occupation.ADMINISTRATOR) {
-			Administrator nowy = new Administrator(type, name, surname);
-			String fileName = "workers/a_"+surname+"_"+name+".txt";
-			FileWriter save = new FileWriter(fileName);
-			save.write(nowy.toString());
-			save.close();
-		}
-		/*
-		 * if(type == Occupation.DOCTOR){
-		 * 
-		 * } if(type == Occupation.NURSE){
-		 * 
-		 * } if(type == Occupation.SUPERCIEC){
-		 */
-/*
-		else {
-			System.out.println("Niewlasciwy typ konta");
-			return null;
-		}
-*/
+	public String toString(){
+		return "Administrator "+this.getLogin();
 	}
-
-
-	public void deleteAcc(String name, String surname) {
-		String del = "workers/a_"+surname+"_"+name+".txt";
-			File file = new File(del);
-			System.out.println(file.delete());
-		
+	public String getLogin() {
+		return login;
 	}
-
+	public void setLogin(String login) {
+		this.login = login;
+	}
 }

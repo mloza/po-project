@@ -7,12 +7,12 @@ import java.util.Date;
 public abstract class Person implements Serializable {
 	public String name;
 	public String surname;
-	private Date birdthDate;
+	private Date birthDate;
 	
 	Person(String name, String surname, Date birdthDate) {
 		this.setName(name);
 		this.setSurname(surname);
-		this.setBirdthDate(birdthDate);
+		this.setBirthDate(birdthDate);
 	}
 
 	public String getName() {
@@ -31,11 +31,12 @@ public abstract class Person implements Serializable {
 		this.surname = surname;
 	}
 
-	public Date getBirdthDate() {
-		return birdthDate;
+	public Date getBirthDate() {
+		return birthDate;
 	}
 
-	public void setBirdthDate(Date birdthDate) {
-		this.birdthDate = birdthDate;
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
+
 }
