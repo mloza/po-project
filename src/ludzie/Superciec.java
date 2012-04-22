@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Superciec extends Worker{
+public class Superciec{
+	/*
 	public Superciec(Occupation type, String name, String surname) {
 		super(type, name, surname);
 	}
@@ -29,7 +30,7 @@ public class Superciec extends Worker{
 			System.out.println("Niewlasciwy typ konta");
 			return null;
 		}
-*/
+
 	}
 
 
@@ -39,5 +40,5 @@ public class Superciec extends Worker{
 			System.out.println(file.delete());
 		
 	}
-
+*/
 }

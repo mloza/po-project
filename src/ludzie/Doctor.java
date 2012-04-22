@@ -3,8 +3,13 @@ package ludzie;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
-public class Doctor extends Worker{
+public class Doctor extends Person implements worker{
+	public Doctor(String login, String name, String surname, Date birthDate){
+		super(name, surname, birthDate);
+	}
+	/*
 	public Doctor(Occupation type, String name, String surname) {
 		super(type, name, surname);
 	}
@@ -29,7 +34,7 @@ public class Doctor extends Worker{
 			System.out.println("Niewlasciwy typ konta");
 			return null;
 		}
-*/
+
 	}
 
 
@@ -39,5 +44,5 @@ public class Doctor extends Worker{
 			System.out.println(file.delete());
 		
 	}
-
+*/
 }
