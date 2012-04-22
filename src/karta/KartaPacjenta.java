@@ -1,17 +1,10 @@
 package karta;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.awt.EventQueue;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-
-import java.awt.EventQueue;
 
 import ludzie.Pacjent;
 
@@ -25,7 +18,7 @@ public class KartaPacjenta implements Serializable {
 	}
 
 	public void printWpis(int i) {
-	}''
+	}
 
 	public void show() {
 		EventQueue.invokeLater(new Runnable() {
