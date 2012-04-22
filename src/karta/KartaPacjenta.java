@@ -50,6 +50,9 @@ public class KartaPacjenta implements Serializable {
 		asd = (GregorianCalendar) Calendar.getInstance();
 		asd.set(2012, 5, 7);
 		w1.setDateOfVisit(asd);
+		
+		w1.Init();
+		
 		listaWizyt.add(w1);
 	}
 
