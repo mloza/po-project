@@ -3,36 +3,25 @@ package karta;
 import helper.alert_ok;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JButton;
-import java.awt.GridLayout;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.factories.FormFactory;
-import com.jgoodies.forms.layout.RowSpec;
-import net.miginfocom.swing.MigLayout;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
 
 public class Karta_GUI extends JFrame {
 	private JPanel contentPane;
@@ -59,28 +48,62 @@ public class Karta_GUI extends JFrame {
 		
 		JPanel dane = new JPanel();
 		tabbedPane.addTab("Dane pacjenta", null, dane, null);
-		dane.setLayout(new MigLayout("", "[207px][207px]", "[16.00][16.00px][16.00px][16.00px][52px]"));
+		GridBagLayout gbl_dane = new GridBagLayout();
+		gbl_dane.columnWidths = new int[]{201, 200, 0};
+		gbl_dane.rowHeights = new int[]{16, 16, 16, 0};
+		gbl_dane.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_dane.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		dane.setLayout(gbl_dane);
 		
 		JLabel lblNewLabel = new JLabel("Imie:");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		dane.add(lblNewLabel, "cell 0 0,grow");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.fill = GridBagConstraints.BOTH;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 0;
+		dane.add(lblNewLabel, gbc_lblNewLabel);
 		
 		JLabel lblImiePacjenta = new JLabel(karta.pacjent.getName());
-		dane.add(lblImiePacjenta, "cell 1 0,grow");
+		GridBagConstraints gbc_lblImiePacjenta = new GridBagConstraints();
+		gbc_lblImiePacjenta.fill = GridBagConstraints.BOTH;
+		gbc_lblImiePacjenta.insets = new Insets(0, 0, 5, 0);
+		gbc_lblImiePacjenta.gridx = 1;
+		gbc_lblImiePacjenta.gridy = 0;
+		dane.add(lblImiePacjenta, gbc_lblImiePacjenta);
 		
 		JLabel lblNewLabel_1 = new JLabel("Nazwisko:");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		dane.add(lblNewLabel_1, "cell 0 1,grow");
+		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+		gbc_lblNewLabel_1.fill = GridBagConstraints.BOTH;
+		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_1.gridx = 0;
+		gbc_lblNewLabel_1.gridy = 1;
+		dane.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel(karta.pacjent.getSurname());
-		dane.add(lblNewLabel_2, "cell 1 1");
+		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+		gbc_lblNewLabel_2.anchor = GridBagConstraints.WEST;
+		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel_2.gridx = 1;
+		gbc_lblNewLabel_2.gridy = 1;
+		dane.add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("Data urodzenia:");
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.RIGHT);
-		dane.add(lblNewLabel_3, "cell 0 2,grow");
+		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
+		gbc_lblNewLabel_3.fill = GridBagConstraints.BOTH;
+		gbc_lblNewLabel_3.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel_3.gridx = 0;
+		gbc_lblNewLabel_3.gridy = 2;
+		dane.add(lblNewLabel_3, gbc_lblNewLabel_3);
 		
 		JLabel lblNewLabel_4 = new JLabel(date.format(karta.pacjent.getBirdthDate()));
-		dane.add(lblNewLabel_4, "cell 1 2,grow");
+		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
+		gbc_lblNewLabel_4.fill = GridBagConstraints.BOTH;
+		gbc_lblNewLabel_4.gridx = 1;
+		gbc_lblNewLabel_4.gridy = 2;
+		dane.add(lblNewLabel_4, gbc_lblNewLabel_4);
 		
 		JPanel wizyty = new JPanel();
 		tabbedPane.addTab("Wizyty", null, wizyty, null);

@@ -2,19 +2,18 @@ package karta;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import net.miginfocom.swing.MigLayout;
+import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
 
 public class Visit_details_GUI extends JDialog {
 
@@ -43,50 +42,104 @@ public class Visit_details_GUI extends JDialog {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new MigLayout("", "[46px][grow]", "[14px][][grow][][grow]"));
+		GridBagLayout gbl_contentPanel = new GridBagLayout();
+		gbl_contentPanel.columnWidths = new int[]{96, 310, 0};
+		gbl_contentPanel.rowHeights = new int[]{14, 14, 74, 14, 73, 0};
+		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblNewLabel = new JLabel("Data wizyty:");
-			contentPanel.add(lblNewLabel, "cell 0 0,alignx left,aligny top");
+			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+			gbc_lblNewLabel.anchor = GridBagConstraints.NORTHWEST;
+			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel.gridx = 0;
+			gbc_lblNewLabel.gridy = 0;
+			contentPanel.add(lblNewLabel, gbc_lblNewLabel);
 		}
 		{
 			JLabel label = new JLabel(wizyta.toString());
-			contentPanel.add(label, "cell 1 0");
+			GridBagConstraints gbc_label = new GridBagConstraints();
+			gbc_label.anchor = GridBagConstraints.NORTHWEST;
+			gbc_label.insets = new Insets(0, 0, 5, 0);
+			gbc_label.gridx = 1;
+			gbc_label.gridy = 0;
+			contentPanel.add(label, gbc_label);
 		}
 		{
 			JLabel lblWykonaneBadania = new JLabel("Wykonane badania:");
-			contentPanel.add(lblWykonaneBadania, "cell 0 1");
+			GridBagConstraints gbc_lblWykonaneBadania = new GridBagConstraints();
+			gbc_lblWykonaneBadania.anchor = GridBagConstraints.NORTHWEST;
+			gbc_lblWykonaneBadania.insets = new Insets(0, 0, 5, 5);
+			gbc_lblWykonaneBadania.gridx = 0;
+			gbc_lblWykonaneBadania.gridy = 1;
+			contentPanel.add(lblWykonaneBadania, gbc_lblWykonaneBadania);
 		}
 		{
 			JLabel label = new JLabel("<dynamic>");
-			contentPanel.add(label, "cell 1 1");
+			GridBagConstraints gbc_label = new GridBagConstraints();
+			gbc_label.anchor = GridBagConstraints.NORTHWEST;
+			gbc_label.insets = new Insets(0, 0, 5, 0);
+			gbc_label.gridx = 1;
+			gbc_label.gridy = 1;
+			contentPanel.add(label, gbc_label);
 		}
 		{
 			JLabel lblOpis = new JLabel("Diagnoza:");
-			contentPanel.add(lblOpis, "cell 0 2");
+			GridBagConstraints gbc_lblOpis = new GridBagConstraints();
+			gbc_lblOpis.anchor = GridBagConstraints.WEST;
+			gbc_lblOpis.insets = new Insets(0, 0, 5, 5);
+			gbc_lblOpis.gridx = 0;
+			gbc_lblOpis.gridy = 2;
+			contentPanel.add(lblOpis, gbc_lblOpis);
 		}
 		{
 			JTextPane textPane = new JTextPane();
 			textPane.setEditable(false);
 			textPane.setText("<dynamic>");
-			contentPanel.add(textPane, "cell 1 2,grow");
+			GridBagConstraints gbc_textPane = new GridBagConstraints();
+			gbc_textPane.fill = GridBagConstraints.BOTH;
+			gbc_textPane.insets = new Insets(0, 0, 5, 0);
+			gbc_textPane.gridx = 1;
+			gbc_textPane.gridy = 2;
+			contentPanel.add(textPane, gbc_textPane);
 		}
 		{
 			JLabel lblPrzepisaneLeki = new JLabel("Przepisane leki:");
-			contentPanel.add(lblPrzepisaneLeki, "cell 0 3");
+			GridBagConstraints gbc_lblPrzepisaneLeki = new GridBagConstraints();
+			gbc_lblPrzepisaneLeki.anchor = GridBagConstraints.NORTHWEST;
+			gbc_lblPrzepisaneLeki.insets = new Insets(0, 0, 5, 5);
+			gbc_lblPrzepisaneLeki.gridx = 0;
+			gbc_lblPrzepisaneLeki.gridy = 3;
+			contentPanel.add(lblPrzepisaneLeki, gbc_lblPrzepisaneLeki);
 		}
 		{
 			JLabel label = new JLabel("<dynamic drugs>");
-			contentPanel.add(label, "cell 1 3");
+			GridBagConstraints gbc_label = new GridBagConstraints();
+			gbc_label.anchor = GridBagConstraints.NORTHWEST;
+			gbc_label.insets = new Insets(0, 0, 5, 0);
+			gbc_label.gridx = 1;
+			gbc_label.gridy = 3;
+			contentPanel.add(label, gbc_label);
 		}
 		{
 			JLabel lblLeki = new JLabel("Leczenie:");
-			contentPanel.add(lblLeki, "cell 0 4");
+			GridBagConstraints gbc_lblLeki = new GridBagConstraints();
+			gbc_lblLeki.anchor = GridBagConstraints.WEST;
+			gbc_lblLeki.insets = new Insets(0, 0, 0, 5);
+			gbc_lblLeki.gridx = 0;
+			gbc_lblLeki.gridy = 4;
+			contentPanel.add(lblLeki, gbc_lblLeki);
 		}
 		{
 			JTextPane textPane = new JTextPane();
 			textPane.setEditable(false);
 			textPane.setText("<dynamic leczenie>");
-			contentPanel.add(textPane, "cell 1 4,grow");
+			GridBagConstraints gbc_textPane = new GridBagConstraints();
+			gbc_textPane.fill = GridBagConstraints.BOTH;
+			gbc_textPane.gridx = 1;
+			gbc_textPane.gridy = 4;
+			contentPanel.add(textPane, gbc_textPane);
 		}
 		{
 			JPanel buttonPane = new JPanel();
