@@ -55,4 +55,9 @@ public class Pacjent extends Person implements Serializable {
 		}
 		karta.show();
 	}
+
+	public void createCardWithVisit() {
+		this.karta = new KartaPacjenta(Pacjent.this);
+		this.karta.CreateVisits();
+	}
 }

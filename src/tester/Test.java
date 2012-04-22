@@ -17,6 +17,8 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.SpringLayout;
 
+import karta.KartaPacjenta;
+
 import choroby.Choroba;
 
 import run.Main;
@@ -36,9 +38,10 @@ public class Test {
 		Pacjent pacjent = new Pacjent("Jan", "Kowalski", cal.getTime());
 		ludzie.add(pacjent);
 		cal.set(1995, 1, 20);
-		pacjent = new Pacjent("Piotr", "Betlej", cal.getTime()); // Jego strata
-																	// że wszedł
-		// właśnie na gg
+		
+		// Jego strata że wszedł właśnie na gg
+		pacjent = new Pacjent("Piotr", "Betlej", cal.getTime());
+		pacjent.createCardWithVisit();
 		ludzie.add(pacjent);
 		System.out.println("Tworzę");
 	}
@@ -64,19 +67,17 @@ public class Test {
 		SpringLayout springLayout = new SpringLayout();
 		frame.getContentPane().setLayout(springLayout);
 		frame.addWindowListener(new WindowAdapter() {
-		      public void windowClosing(WindowEvent e) {
-		    	Test.self.saveAll();
-		        System.exit(0);
-		      }
-		    });
+			public void windowClosing(WindowEvent e) {
+				Test.self.saveAll();
+				System.exit(0);
+			}
+		});
 	}
-	
-	public void saveAll()
-	{
+
+	public void saveAll() {
 		ObjectOutputStream op;
 		try {
-			op = new ObjectOutputStream(new FileOutputStream(
-					"data/ludzie.txt"));
+			op = new ObjectOutputStream(new FileOutputStream("data/ludzie.txt"));
 			op.writeObject(this.ludzie);
 			System.out.println("Zapisuje All");
 			Person pacjent = ludzie.get(1);
@@ -112,7 +113,7 @@ public class Test {
 						e1.printStackTrace();
 					}
 				}
-				
+
 				try {
 					Test.frame.setVisible(true);
 					window.run();
