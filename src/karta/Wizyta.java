@@ -1,19 +1,16 @@
 package karta;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import leczenie.*;
-import java.util.ArrayList;
-
-import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry.Entry;
-
+import leczenie.Badanie;
+import leczenie.BadanieNotFoundException;
+import leczenie.Lek;
 import choroby.Choroba;
 import choroby.Objaw;
 import choroby.ObjawNotFoundException;
@@ -64,7 +61,17 @@ public class Wizyta implements Serializable {
 			System.out.println("Przeziębienie jest niezdefiniowane");
 			//e.printStackTrace();
 		}
-		leczenie = "Wygrzewanie sie w słońcu, dużo, długo bez przerwy najlepiej. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum, libero et euismod varius, urna enim lobortis enim, vel volutpat est mauris quis arcu. Vivamus dignissim gravida rhoncus. Sed vel augue sed magna lacinia lacinia nec eget ante. Quisque tincidunt felis eu nulla egestas gravida. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean euismod, metus venenatis congue aliquet, purus libero vestibulum diam, vitae pretium lacus ligula eget justo. Sed tempus tempus velit, vel sollicitudin magna vulputate a. Vivamus massa sem, pulvinar in posuere quis, dapibus ut urna. Curabitur suscipit adipiscing laoreet. Proin sit amet eros eu tellus ultrices consequat. Mauris id erat vel augue vulputate viverra. Sed porta vehicula dolor, eget imperdiet eros aliquet at. Nulla facilisi. Aenean facilisis mi et metus porta ut imperdiet velit ultrices. Proin sodales iaculis metus, id vehicula erat pulvinar ac.";
+		
+		try {
+			chh = Choroba.find("Martwy");
+			String opis = "Brak fal mózgowych wskazuje jednoznacznie że pacjent opuścił już ten świat.";
+			diagnoza.put(chh, opis);
+		} catch (SicknessNotFoundException e) {
+			System.out.println("Przeziębienie jest niezdefiniowane");
+			//e.printStackTrace();
+		}
+		
+		leczenie = "Pochować jak najszybciej. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum, libero et euismod varius, urna enim lobortis enim, vel volutpat est mauris quis arcu. Vivamus dignissim gravida rhoncus. Sed vel augue sed magna lacinia lacinia nec eget ante. Quisque tincidunt felis eu nulla egestas gravida. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean euismod, metus venenatis congue aliquet, purus libero vestibulum diam, vitae pretium lacus ligula eget justo. Sed tempus tempus velit, vel sollicitudin magna vulputate a. Vivamus massa sem, pulvinar in posuere quis, dapibus ut urna. Curabitur suscipit adipiscing laoreet. Proin sit amet eros eu tellus ultrices consequat. Mauris id erat vel augue vulputate viverra. Sed porta vehicula dolor, eget imperdiet eros aliquet at. Nulla facilisi. Aenean facilisis mi et metus porta ut imperdiet velit ultrices. Proin sodales iaculis metus, id vehicula erat pulvinar ac.";
 		try {
 			objawy.add(Objaw.find("Gorączka"));
 		} catch (ObjawNotFoundException e) {
@@ -74,6 +81,12 @@ public class Wizyta implements Serializable {
 			objawy.add(Objaw.find("Ból głowy"));
 		} catch (ObjawNotFoundException e) {
 			System.out.println("Nie ma objawu Ból głowy");
+		}
+		
+		try {
+			jakieBadania.put(Badanie.find("Elektroencefalogram"), "Badanie wykazało że pacjent nie posiada fal mózgowych.");
+		} catch (BadanieNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -102,4 +115,17 @@ public class Wizyta implements Serializable {
 		}
 		return str.toString();
 	}
+	
+	public String getBadaniaString() {
+		StringBuilder ret = new StringBuilder();
+		System.out.println("asd");
+		for(Map.Entry<Badanie, String> entry: jakieBadania.entrySet())
+		{
+			System.out.println(entry.getKey().getNazwa());
+			if(ret.length() != 0) ret.append(", ");
+			ret.append(entry.getKey().getNazwa());
+		}
+		return ret.toString();
+	}
+	
 }

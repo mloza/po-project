@@ -5,16 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import choroby.Choroba;
-import choroby.Objaw;
-import choroby.ObjawNotFoundException;
 import ciphers.Cipher;
 
-public class Badanie {
+public class Badanie implements Serializable {
 	private String nazwa;
 	private String opis;
 	private static String sep = "&";
@@ -23,20 +21,23 @@ public class Badanie {
 	static Cipher cip = Cipher.ADFGVC;
 	
 	static {
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		try {
 			BufferedReader plik = new BufferedReader(new FileReader("data/badania.txt"));
 			String linia;
-			System.out.println("---");
+			System.out.println("a---");
 			while((linia = cip.getDecipher(plik.readLine())) != null)
 			{
 				Badanie ch = new Badanie();
 				String[] values = linia.split(Pattern.quote(sep));
+				System.out.println(values[0]);
 				ch.setNazwa(values[0]);
 				ch.opis = cip.getDecipher(values[1]);
 				badania.add(ch);
 			}
-			System.out.println("---");
+			System.out.println("a---");
 		} catch (FileNotFoundException e) {
+			System.out.println("Nie udało się wczytac badań");
 			try {
 				BufferedWriter plik = new BufferedWriter(new FileWriter("data/badania.txt"));
 				String save = "";

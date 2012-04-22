@@ -109,7 +109,7 @@ public class ADFGVX
 			k %= col.length;
 			col[k++].add(morse[p.y]);
 			k %= col.length;
-''		}
+		}
 
 		// uzywamy stringbuildera zeby polaczyc znaki w kaxzdej kolumnie
 		StringBuilder sb = new StringBuilder(digit.length * 2);

@@ -97,7 +97,7 @@ public class Visit_details_GUI extends JDialog {
 			contentPanel.add(lblWykonaneBadania, gbc_lblWykonaneBadania);
 		}
 		{
-			JLabel label = new JLabel("<dynamic>");
+			JLabel label = new JLabel(wizyta.getBadaniaString());
 			GridBagConstraints gbc_label = new GridBagConstraints();
 			gbc_label.anchor = GridBagConstraints.NORTHWEST;
 			gbc_label.insets = new Insets(0, 0, 5, 0);
