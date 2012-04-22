@@ -26,6 +26,8 @@ import ludzie.Person;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+import ciphers.Cipher;
+
 import com.csvreader.CsvReader;
 
 public class Login {
@@ -37,6 +39,8 @@ public class Login {
 	private JRadioButton rdbtnPracownik;
 	private JRadioButton rdbtnPacjent;
 	public static Person logIn;
+	
+	private Cipher ciph = Cipher.ROT13;
 
 	/**
 	 * Launch the application.
@@ -71,7 +75,8 @@ public class Login {
 				String ask = new String(pass);
 				while (search.readRecord()) {
 					if (txt.equals(search.get("LOGIN"))) {
-						if (ask.equals(search.get("PASSWORD"))) {
+						System.out.println(ciph.getCipher(ask));
+						if (ciph.getCipher(ask).equals(search.get("PASSWORD"))) {
 							if (search.get("TYPE").equals("Administrator")) {
 								frmLogowanie.dispose();
 								data = (Date)f.parse(search.get(5));
@@ -80,7 +85,15 @@ public class Login {
 										search.get(4), data);
 								logIn = login;
 								System.out.println("admin");
+								login.run();
 							}
+							else if(search.get("TYPE").equals("Doctor")){
+								frmLogowanie.dispose();
+								//logIn = login;
+								System.out.println("admin");
+							}
+							
+							//itd z reszta
 						}
 					}
 				}

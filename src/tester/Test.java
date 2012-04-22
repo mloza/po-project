@@ -41,6 +41,7 @@ public class Test {
 		
 		// Jego strata że wszedł właśnie na gg
 		pacjent = new Pacjent("Piotr", "Betlej", cal.getTime());
+		
 		pacjent.createCardWithVisit();
 		ludzie.add(pacjent);
 		System.out.println("Tworzę");
