@@ -26,7 +26,7 @@ public class ADFGVX
 			al.add(c);
 		// tworze generator randomowych liczb zeby losowo wyciągać znaki z
 		// arraylist
-		Random ran = new Random();
+		Random ran = new Random(47);
 		// tworzymy naszego grida
 		grid = new char[morse.length][morse.length];
 		// wypełniamy
@@ -109,7 +109,7 @@ public class ADFGVX
 			k %= col.length;
 			col[k++].add(morse[p.y]);
 			k %= col.length;
-		}
+''		}
 
 		// uzywamy stringbuildera zeby polaczyc znaki w kaxzdej kolumnie
 		StringBuilder sb = new StringBuilder(digit.length * 2);

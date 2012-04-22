@@ -1,7 +1,7 @@
 package ciphers;
 
 public enum Cipher {
-	ROT13 {
+	CAESAR {
 		public String getCipher(String toCipher) {
 			char[] temp = toCipher.toCharArray();
 
@@ -24,7 +24,7 @@ public enum Cipher {
 			return new String(temp);
 		}
 	},
-	CAESAR {
+	ROT13 {
 		public String getCipher(String throughRot13){
 			String temp = throughRot13;
 			String temp2 = "";

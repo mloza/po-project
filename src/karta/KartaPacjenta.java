@@ -25,7 +25,7 @@ public class KartaPacjenta implements Serializable {
 	}
 
 	public void printWpis(int i) {
-	}
+	}''
 
 	public void show() {
 		EventQueue.invokeLater(new Runnable() {
