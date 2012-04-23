@@ -1,48 +1,39 @@
 package ludzie;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Date;
 
-public class Doctor extends Person implements worker{
-	public Doctor(String login, String name, String surname, Date birthDate){
-		super(name, surname, birthDate);
-	}
-	/*
-	public Doctor(Occupation type, String name, String surname) {
-		super(type, name, surname);
-	}
-
-	public void createAcc(Occupation type, String name, String surname) throws IOException{
-		if (type == Occupation.ADMINISTRATOR) {
-			Doctor nowy = new Doctor(type, name, surname);
-			String fileName = "workers/a_"+surname+"_"+name+".txt";
-			FileWriter save = new FileWriter(fileName);
-			save.write(nowy.toString());
-			save.close();
-		}
-		/*
-		 * if(type == Occupation.DOCTOR){
-		 * 
-		 * } if(type == Occupation.NURSE){
-		 * 
-		 * } if(type == Occupation.SUPERCIEC){
-		 */
-/*
-		else {
-			System.out.println("Niewlasciwy typ konta");
-			return null;
-		}
-
-	}
+import javax.swing.JFrame;
+import javax.swing.SpringLayout;
 
 
-	public void deleteAcc(String name, String surname) {
-		String del = "workers/a_"+surname+"_"+name+".txt";
-			File file = new File(del);
-			System.out.println(file.delete());
+
+public class Doctor extends Person {
+
+	private JFrame frame;
+
+		private String login;
+		Occupation type = Occupation.DOCTOR;
 		
+		public Doctor(String login, String name, String surname,
+				Date birthDate) {
+			super(name, surname, birthDate);
+			
+			this.setLogin(login);
+			initialize();
+		}
+
+		protected String getLogin() {
+			return login;
+		}
+
+		private void setLogin(String login) {
+			this.login = login;
+		}
+		
+
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-*/
+
 }

@@ -50,7 +50,7 @@ public class Administrator extends Person implements worker{
 	private JTextField txtSurnameS;
 	private JTextField txtNameS;
 
-	private Cipher ciph = Cipher.ROT13;
+	private Cipher ciph = Cipher.ADFGVC;
 
 	
 	public Administrator(String login, String name, String surname,
@@ -116,7 +116,7 @@ public class Administrator extends Person implements worker{
 				String ans = "";
 				String nowy = "";
 				try {
-					CsvReader search = new CsvReader("workers.csv");
+					CsvReader search = new CsvReader("data/workers.csv");
 					search.readHeaders();
 					while (search.readRecord()) {
 						if (log.equals(search.get("LOGIN"))) {
@@ -165,7 +165,7 @@ public class Administrator extends Person implements worker{
 		class ActionD {
 			protected void run(String logincheck, char[] pass) {
 				try {
-					CsvReader search = new CsvReader("workers.csv");
+					CsvReader search = new CsvReader("data/workers.csv");
 					search.readHeaders();
 					String haslo = new String(pass);
 					String txt = login; // to jest login administratora
@@ -205,10 +205,10 @@ public class Administrator extends Person implements worker{
 		class ActionC {
 			protected void run(String login, char[] pass, String typ,
 					String nazwisko, String imie) {
-				String of = "workers.csv";
+				String of = "data/workers.csv";
 				if (!typ.equals("")) {
 					try {
-						CsvReader search = new CsvReader("workers.csv");
+						CsvReader search = new CsvReader("data/workers.csv");
 						search.readHeaders();
 						String haslo = new String(pass);
 						boolean can = true;

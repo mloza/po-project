@@ -22,6 +22,7 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import ludzie.Administrator;
+import ludzie.Doctor;
 import ludzie.Person;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
@@ -40,7 +41,7 @@ public class Login {
 	private JRadioButton rdbtnPacjent;
 	public static Person logIn;
 	
-	private Cipher ciph = Cipher.ROT13;
+	private Cipher ciph = Cipher.ADFGVC;
 
 	/**
 	 * Launch the application.
@@ -89,8 +90,12 @@ public class Login {
 							}
 							else if(search.get("TYPE").equals("Doctor")){
 								frmLogowanie.dispose();
-								//logIn = login;
-								System.out.println("admin");
+								data = (Date)f.parse(search.get(5));
+								Doctor login = new Doctor(
+										search.get(0), search.get(3),
+										search.get(4), data);
+								logIn = login;
+								System.out.println("lekarz");
 							}
 							
 							//itd z reszta
@@ -207,10 +212,10 @@ public class Login {
 				Check a = new Check();
 				if (rdbtnPracownik.isSelected()) {
 					a.c(txtWpiszLogin.getText(), passwordField.getPassword(),
-							"workers.csv");
+							"data/workers.csv");
 				} else if (rdbtnPacjent.isSelected()) {
 					a.c(txtWpiszLogin.getText(), passwordField.getPassword(),
-							"patients.csv");
+							"data/patients.csv");
 				}
 
 			}
