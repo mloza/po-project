@@ -16,7 +16,6 @@ public class Nurse extends Person implements worker{
 		public Nurse(String login, String name, String surname,
 				Date birthDate) {
 			super(name, surname, birthDate);
-			
 			this.setLogin(login);
 			
 		}

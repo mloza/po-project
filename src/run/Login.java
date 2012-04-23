@@ -4,12 +4,18 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -24,6 +30,8 @@ import javax.swing.SwingConstants;
 import ludzie.Administrator;
 import ludzie.Doctor;
 import ludzie.Nurse;
+import ludzie.Pacjent;
+import ludzie.PatientCardNotExistsException;
 import ludzie.Person;
 import ludzie.Superciec;
 
@@ -42,7 +50,7 @@ public class Login {
 	private JRadioButton rdbtnPracownik;
 	private JRadioButton rdbtnPacjent;
 	public static Person logIn;
-	
+
 	private Cipher ciph = Cipher.ADFGVC;
 
 	/**
@@ -82,54 +90,40 @@ public class Login {
 						if (ciph.getCipher(ask).equals(search.get("PASSWORD"))) {
 							if (search.get("TYPE").equals("Administrator")) {
 								frmLogowanie.dispose();
-								data = (Date)f.parse(search.get(5));
+								data = (Date) f.parse(search.get(5));
 								Administrator login = new Administrator(
 										search.get(0), search.get(3),
 										search.get(4), data);
 								logIn = login;
 								System.out.println("admin");
 								login.run();
-							}
-							else if(search.get("TYPE").equals("Lekarz")){
+							} else if (search.get("TYPE").equals("Lekarz")) {
 								frmLogowanie.dispose();
-								data = (Date)f.parse(search.get(5));
-								Doctor login = new Doctor(
-										search.get(0), search.get(3),
-										search.get(4), data);
+								data = (Date) f.parse(search.get(5));
+								Doctor login = new Doctor(search.get(0),
+										search.get(3), search.get(4), data);
 								logIn = login;
 								System.out.println("lekarz");
 								login.run();
-							}
-							else if(search.get("TYPE").equals("Pielegniarka")){
+							} else if (search.get("TYPE")
+									.equals("Pielegniarka")) {
 								frmLogowanie.dispose();
-								data = (Date)f.parse(search.get(5));
-								Nurse login = new Nurse(
-										search.get(0), search.get(3),
-										search.get(4), data);
+								data = (Date) f.parse(search.get(5));
+								Nurse login = new Nurse(search.get(0),
+										search.get(3), search.get(4), data);
 								logIn = login;
 								System.out.println("pigula");
 								login.run();
-							}
-							else if(search.get("TYPE").equals("Superciec")){
+							} else if (search.get("TYPE").equals("Superciec")) {
 								frmLogowanie.dispose();
-								data = (Date)f.parse(search.get(5));
-								Superciec login = new Superciec(
-										search.get(0), search.get(3),
-										search.get(4), data);
+								data = (Date) f.parse(search.get(5));
+								Superciec login = new Superciec(search.get(0),
+										search.get(3), search.get(4), data);
 								logIn = login;
 								System.out.println("superciec");
 								login.run();
 							}
-							else if(search.get("TYPE").equals("Lekarz")){
-								frmLogowanie.dispose();
-								data = (Date)f.parse(search.get(5));
-								Doctor login = new Doctor(
-										search.get(0), search.get(3),
-										search.get(4), data);
-								logIn = login;
-								System.out.println("pacjent");
-								login.run();
-							}
+
 						}
 					}
 				}
@@ -140,8 +134,48 @@ public class Login {
 			} catch (IOException e) {
 				System.err.println(e);
 				e.printStackTrace();
-			} catch (ParseException e){
+			} catch (ParseException e) {
 				e.printStackTrace();
+			}
+		}
+
+		public void c2(String txt, char[] pass, String searchfile) {
+			List<Pacjent> ludzie = null;
+			try {
+				System.out.println("Wczytuję");
+				ObjectInputStream op = new ObjectInputStream(
+						new FileInputStream(searchfile));
+				ludzie = (ArrayList<Pacjent>) op.readObject();
+			} catch (Exception e) {
+				System.out.println("Nie wczytałem");
+				e.printStackTrace();
+			} finally {
+				ObjectOutputStream op;
+				try {
+					op = new ObjectOutputStream(
+							new FileOutputStream(searchfile));
+					op.writeObject(ludzie);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+			for (Pacjent p : ludzie) {
+				if (p.getLogin().equals(txt)) {
+					String ask = new String(pass);
+					if (p.getPass().equals(ask)) {
+						Pacjent login = new Pacjent(p.getLogin(), p.getPass(),
+								p.name, p.surname, p.getBirthDate());
+						frmLogowanie.dispose();
+						logIn = login;
+						System.out.println("pacjent");
+						try {
+							login.showCard();
+						} catch (PatientCardNotExistsException e) {
+							e.printStackTrace();
+						}
+					}
+				}
 			}
 		}
 	}
@@ -245,8 +279,8 @@ public class Login {
 					a.c(txtWpiszLogin.getText(), passwordField.getPassword(),
 							"data/workers.csv");
 				} else if (rdbtnPacjent.isSelected()) {
-					a.c(txtWpiszLogin.getText(), passwordField.getPassword(),
-							"data/patients.csv");
+					a.c2(txtWpiszLogin.getText(), passwordField.getPassword(),
+							"data/ludzie.txt");
 				}
 
 			}
