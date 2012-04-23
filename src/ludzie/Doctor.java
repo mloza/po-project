@@ -35,35 +35,9 @@ public class Doctor extends Person {
 		 */
 		public void run(){
 			initialize();
-			/*
-			try {
-				System.out.println("Wczytuję");
-				ObjectInputStream op = new ObjectInputStream(
-						new FileInputStream("data/ludzie.txt"));
-				window.ludzie = (ArrayList<Person>) op.readObject();
-			} catch (Exception e) {
-				System.out.println("Nie wczytałem");
-				e.printStackTrace();
-				window.createPeoples();
-			} finally {
-				ObjectOutputStream op;
-				try {
-					op = new ObjectOutputStream(new FileOutputStream(
-							"data/ludzie.txt"));
-					op.writeObject(window.ludzie);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-
-			try {
-				Test.frame.setVisible(true);
-				window.run();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-			}
-			*/
+			
+			
+			
 		}
 
 	private void initialize() {
