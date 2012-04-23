@@ -51,4 +51,10 @@ public class Superciec extends Person implements worker{
 		frame.getContentPane().add(panel);
 		frame.setVisible(true);
 	}
+	@SuppressWarnings("deprecation")
+	public static void main(String[] args){
+		
+		Superciec r = new Superciec("s","s","s", new Date(2012, 12 ,3));
+		r.initialize();
+	}
 }
