@@ -6,11 +6,16 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import java.awt.FlowLayout;
 import javax.swing.JTable;
+import javax.swing.JMenuItem;
+import javax.swing.JMenu;
+import javax.swing.table.DefaultTableModel;
 
 public class GabinetGUI2 {
 
 	private JFrame frame;
-	private JTable table;
+	private JMenu mnOpcje;
+	private JMenuItem mntmZapisz;
+	private JMenuItem mntmWyjd;
 
 	/**
 	 * Launch the application.
@@ -45,10 +50,16 @@ public class GabinetGUI2 {
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
-		frame.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		table = new JTable();
-		frame.getContentPane().add(table);
+		mnOpcje = new JMenu("Opcje");
+		menuBar.add(mnOpcje);
+		
+		mntmZapisz = new JMenuItem("Zapisz");
+		mnOpcje.add(mntmZapisz);
+		
+		mntmWyjd = new JMenuItem("Wyjdź");
+		mnOpcje.add(mntmWyjd);
+		frame.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 	}
 
 }

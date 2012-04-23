@@ -16,7 +16,6 @@ public class Sprzet{
 	static ArrayList<Sprzet> jakiSprzet = new ArrayList<Sprzet>();
 	static String sep = "$";
 	static Cipher cip = Cipher.ADFGVC;
-	
 static {
 	try {
 		BufferedReader plik = new BufferedReader(new FileReader("data/sprzet.txt"));

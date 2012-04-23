@@ -22,7 +22,7 @@ import java.awt.event.MouseEvent;
 
 public class Gabinet_GUI {
 
-	private JFrame frame;
+	public JFrame frame;
 	private JTable table;
 	/**
 	 * Launch the application.
@@ -67,19 +67,23 @@ public class Gabinet_GUI {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		przegladanie.add(scrollPane, BorderLayout.CENTER);
-		
+		String[] namesOfColumns = {"Typ Gabinetu", "Ilosc", "Sprzet w Gabinecie"};
 		table = new JTable();
+		//table.setModel(new DefaultTableModel(namesOfColumns,5));
+		
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Grypa", "Gor\u0105czka, Odwodnienie"},
-				{"Kamica", "Odwodnienie, Gor\u0105czka"},
+				{"Standardowy", 5, "Stół, Krzesło, Biurko, Stetoskop, Ciśnieniomierz" },
+				{"Zabiegowy", 2, "Skalpel, Aparat EKG, Tomograf, Ciśnieniomierz" },
+				{"Operacyjny", 2, "Skalpel, Stół, Tomograf, Młoteczek Lekarski" },
+				{"", "" ,""},
 			},
 			new String[] {
-				"Typ Gabinetu", "Sprzet w Gabinecie"
+				"Typ Gabinetu", "Ilość", "Sprzet w Gabinecie", 
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Object.class, String.class
+				Object.class, Integer.class, String.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -87,36 +91,47 @@ public class Gabinet_GUI {
 		});
 		scrollPane.setViewportView(table);
 		
+		final JPanel panel_przyciski = new JPanel();
+		FlowLayout fl_panel_przyciski = (FlowLayout) panel_przyciski.getLayout();
+		fl_panel_przyciski.setAlignment(FlowLayout.RIGHT);
+		przegladanie.add(panel_przyciski, BorderLayout.NORTH);
+		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
-		final JMenu mnChoroby = new JMenu("Zarządzaj Gabinetami");
-		menuBar.add(mnChoroby);
+		final JMenu mnGabinet = new JMenu("Zarządzanie Gabinetem");
+		menuBar.add(mnGabinet);
 		
-		final JMenuItem mntmPrzegldaj = new JMenuItem("Przegl\u0105daj");
-		mntmPrzegldaj.addMouseListener(new MouseAdapter() {
+		final JMenuItem mntmZapisz = new JMenuItem("Zapisz");
+		mntmZapisz.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
 			}
 		});
-		mnChoroby.add(mntmPrzegldaj);
+		mnGabinet.add(mntmZapisz);
 		
-		JMenuItem mntmDodajNow = new JMenuItem("Dodaj now\u0105");
-		mntmDodajNow.addMouseListener(new MouseAdapter() {
+		JMenuItem mntmWyjdz = new JMenuItem("Wyjdź");
+		mntmWyjdz.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
 			}
 		});
-		mnChoroby.add(mntmDodajNow);
 		
-		JMenuItem mntmEdytuj = new JMenuItem("Edytuj");
-		mnChoroby.add(mntmEdytuj);
+		JMenuItem mntmNewGabinet = new JMenuItem("Dodaj nowy Gabinet");
+		mntmNewGabinet.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		mnGabinet.add(mntmNewGabinet);
 		
-		JMenuItem mntmUsu = new JMenuItem("Usuń");
-		mnChoroby.add(mntmUsu);
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Usuń Gabinet");
+		mnGabinet.add(mntmNewMenuItem_1);
+		mnGabinet.add(mntmWyjdz);
 	}
+
 	}
 
 
