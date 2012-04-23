@@ -23,7 +23,9 @@ import javax.swing.SwingConstants;
 
 import ludzie.Administrator;
 import ludzie.Doctor;
+import ludzie.Nurse;
 import ludzie.Person;
+import ludzie.Superciec;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
@@ -88,7 +90,7 @@ public class Login {
 								System.out.println("admin");
 								login.run();
 							}
-							else if(search.get("TYPE").equals("Doctor")){
+							else if(search.get("TYPE").equals("Lekarz")){
 								frmLogowanie.dispose();
 								data = (Date)f.parse(search.get(5));
 								Doctor login = new Doctor(
@@ -96,9 +98,38 @@ public class Login {
 										search.get(4), data);
 								logIn = login;
 								System.out.println("lekarz");
+								login.run();
 							}
-							
-							//itd z reszta
+							else if(search.get("TYPE").equals("Pielegniarka")){
+								frmLogowanie.dispose();
+								data = (Date)f.parse(search.get(5));
+								Nurse login = new Nurse(
+										search.get(0), search.get(3),
+										search.get(4), data);
+								logIn = login;
+								System.out.println("pigula");
+								login.run();
+							}
+							else if(search.get("TYPE").equals("Superciec")){
+								frmLogowanie.dispose();
+								data = (Date)f.parse(search.get(5));
+								Superciec login = new Superciec(
+										search.get(0), search.get(3),
+										search.get(4), data);
+								logIn = login;
+								System.out.println("superciec");
+								login.run();
+							}
+							else if(search.get("TYPE").equals("Lekarz")){
+								frmLogowanie.dispose();
+								data = (Date)f.parse(search.get(5));
+								Doctor login = new Doctor(
+										search.get(0), search.get(3),
+										search.get(4), data);
+								logIn = login;
+								System.out.println("pacjent");
+								login.run();
+							}
 						}
 					}
 				}

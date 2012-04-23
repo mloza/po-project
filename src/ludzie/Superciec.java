@@ -1,44 +1,54 @@
 package ludzie;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.Date;
 
-public class Superciec{
-	/*
-	public Superciec(Occupation type, String name, String surname) {
-		super(type, name, surname);
-	}
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SpringLayout;
 
-	public void createAcc(Occupation type, String name, String surname) throws IOException{
-		if (type == Occupation.ADMINISTRATOR) {
-			Superciec nowy = new Superciec(type, name, surname);
-			String fileName = "workers/a_"+surname+"_"+name+".txt";
-			FileWriter save = new FileWriter(fileName);
-			save.write(nowy.toString());
-			save.close();
-		}
-		/*
-		 * if(type == Occupation.DOCTOR){
-		 * 
-		 * } if(type == Occupation.NURSE){
-		 * 
-		 * } if(type == Occupation.SUPERCIEC){
-		 */
-/*
-		else {
-			System.out.println("Niewlasciwy typ konta");
-			return null;
-		}
+public class Superciec extends Person implements worker{
 
-	}
+	private JFrame frame;
 
-
-	public void deleteAcc(String name, String surname) {
-		String del = "workers/a_"+surname+"_"+name+".txt";
-			File file = new File(del);
-			System.out.println(file.delete());
+		private String login;
+		Occupation type = Occupation.DOCTOR;
 		
+		public Superciec(String login, String name, String surname,
+				Date birthDate) {
+			super(name, surname, birthDate);
+			
+			this.setLogin(login);
+			
+		}
+
+		protected String getLogin() {
+			return login;
+		}
+
+		private void setLogin(String login) {
+			this.login = login;
+		}
+		
+		/**
+		 * @wbp.parser.entryPoint
+		 */
+		public void run(){
+			initialize();
+		}
+
+	private void initialize() {
+		frame = new JFrame("Superciec");
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		SpringLayout springLayout = new SpringLayout();
+		frame.getContentPane().setLayout(springLayout);
+		
+		JPanel panel = new JPanel();
+		springLayout.putConstraint(SpringLayout.NORTH, panel, 0, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, panel, 0, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, panel, 250, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, panel, 430, SpringLayout.WEST, frame.getContentPane());
+		frame.getContentPane().add(panel);
+		frame.setVisible(true);
 	}
-*/
 }
