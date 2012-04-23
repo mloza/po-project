@@ -18,7 +18,7 @@ public class Badanie implements Serializable {
 	private static String sep = "&";
 	
 	static List<Badanie> badania = new ArrayList<Badanie>();
-	static Cipher cip = Cipher.ADFGVC;
+	static Cipher cip = Cipher.ROT13;
 	
 	static {
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -26,8 +26,9 @@ public class Badanie implements Serializable {
 			BufferedReader plik = new BufferedReader(new FileReader("data/badania.txt"));
 			String linia;
 			System.out.println("a---");
-			while((linia = cip.getDecipher(plik.readLine())) != null)
+			while((linia = plik.readLine()) != null)
 			{
+				linia = cip.getDecipher(linia);
 				Badanie ch = new Badanie();
 				String[] values = linia.split(Pattern.quote(sep));
 				System.out.println(values[0]);
@@ -44,30 +45,30 @@ public class Badanie implements Serializable {
 				Badanie ch = new Badanie();
 				ch.setNazwa("Badanie krwi");
 				ch.opis = "Pobranie próbki krwi oraz badanie na niedobór składników";
-				save += ch.getNazwa()+sep+ch.opis+"\n";
+				save += cip.getCipher(ch.getNazwa()+sep+ch.opis)+"\n";
 				badania.add(ch);
 				ch = new Badanie();
 				ch.setNazwa("Pomiar ciśnienia");
 				ch.opis = "Pomiar ciśnienia krwi";
-				save += ch.getNazwa()+sep+ch.opis+"\n";
+				save += cip.getCipher(ch.getNazwa()+sep+ch.opis)+"\n";
 				badania.add(ch);
 				ch = new Badanie();
 				ch.setNazwa("Badanie moczu");
 				ch.opis = "Pobranie próbki moczu do badania aby sprawdzić czy wszystko ok";
-				save += ch.getNazwa()+sep+ch.opis+"\n";
+				save += cip.getCipher(ch.getNazwa()+sep+ch.opis)+"\n";
 				badania.add(ch);
 				ch = new Badanie();
 				ch.setNazwa("Elektroencefalogram");
 				ch.opis = "Podłaczanie kabelków do głowy";
-				save += ch.getNazwa()+sep+ch.opis+"\n";
+				save += cip.getCipher(ch.getNazwa()+sep+ch.opis)+"\n";
 				badania.add(ch);
 				ch = new Badanie();
 				ch.setNazwa("Odporność na elektryczność");
 				ch.opis = "Poddanie pacjęta elektrowstrząsom aby sprawdzić czy przeżyje, jeżeli mu się uda znaczy że jest z nim coś nie tak.";
-				save += ch.getNazwa()+sep+ch.opis+"\n";
+				save += cip.getCipher(ch.getNazwa()+sep+ch.opis)+"\n";
 				badania.add(ch);
 
-				plik.append(cip.getCipher(save));
+				plik.append(save);
 				plik.close();
 			} catch (IOException e1) {
 				System.out.println("Fatalnie, nie da się z tym nic zrobić");

@@ -9,6 +9,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
@@ -21,12 +23,59 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 public class Karta_GUI extends JFrame {
 	private JPanel contentPane;
 	private JTable wizytyTable;
 	private KartaPacjenta karta;
+	private JTable table;
+	
+	class MyTModel extends AbstractTableModel implements TableModelListener {
+		private Object[][] data = {};
+		private Object[] columnNames = {"Data wizyty", "Odbyła się", "Potwierdzona"};
+		
+		
+		@Override
+		public int getRowCount() {
+			return data.length;
+		}
+		
+		public String getColumnName(int col) {
+	        return (String) columnNames[col];
+	    }
+		
+		@Override
+		public int getColumnCount() {
+			return columnNames.length;
+		}
+
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			return data[rowIndex][columnIndex];
+		}
+		
+		public void Initiate() {
+			Object[][] asd = new Object[karta.listaWizyt.size()][this.getColumnCount()];
+			int i =0;
+			for(Wizyta it : karta.listaWizyt)
+			{
+				//asd[i++][0] = date.format(it.getDate());
+				asd[i][0] = it;
+				asd[i][1] = it.isOdbyta()?"Tak":"Nie";
+				asd[i++][2] = it.isPotwierdzona()?"Tak":"Nie";
+			}
+			data = asd;
+		}
+		
+		public void tableChanged(TableModelEvent e)
+		{
+			this.Initiate();
+			table.repaint();
+		}
+	}
 	
 	/**
 	 * Create the frame.
@@ -37,7 +86,7 @@ public class Karta_GUI extends JFrame {
 		final SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
 		
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 559, 383);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -98,7 +147,7 @@ public class Karta_GUI extends JFrame {
 		gbc_lblNewLabel_3.gridy = 2;
 		dane.add(lblNewLabel_3, gbc_lblNewLabel_3);
 		
-		JLabel lblNewLabel_4 = new JLabel(date.format(karta.pacjent.getBirdthDate()));
+		JLabel lblNewLabel_4 = new JLabel(date.format(karta.pacjent.getBirthDate()));
 		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
 		gbc_lblNewLabel_4.fill = GridBagConstraints.BOTH;
 		gbc_lblNewLabel_4.gridx = 1;
@@ -112,44 +161,12 @@ public class Karta_GUI extends JFrame {
 		JScrollPane scrollWizyty = new JScrollPane();
 		wizyty.add(scrollWizyty, BorderLayout.CENTER);
 		
-		AbstractTableModel tableModel = new AbstractTableModel() {
-			private Object[][] data = {};
-			private Object[] columnNames = {"Data wizyty"};
-			
-			@Override
-			public int getRowCount() {
-				return data.length;
-			}
-			
-			public String getColumnName(int col) {
-		        return (String) columnNames[col];
-		    }
-			
-			@Override
-			public int getColumnCount() {
-				return columnNames.length;
-			}
-
-			@Override
-			public Object getValueAt(int rowIndex, int columnIndex) {
-				return data[rowIndex][columnIndex];
-			}
-			
-			{
-				Object[][] asd = new Object[karta.listaWizyt.size()][this.getColumnCount()];
-				int i =0;
-				for(Wizyta it : karta.listaWizyt)
-				{
-					//asd[i++][0] = date.format(it.getDate());
-					asd[i++][0] = it;
-				}
-				data = asd;
-			}
-			
-		};
+		final MyTModel tableModel = new MyTModel();
 		//tableModel.getData();
+		tableModel.Initiate();
+		tableModel.addTableModelListener(tableModel);
 		
-		wizytyTable = new JTable();
+		this.table = wizytyTable = new JTable();
 		wizytyTable.setFillsViewportHeight(true);
 		wizytyTable.setModel(tableModel);
 		scrollWizyty.setViewportView(wizytyTable);
@@ -166,7 +183,7 @@ public class Karta_GUI extends JFrame {
 					{
 						throw new VisitNotSelectedException();
 					}
-					dialog = new Visit_details_GUI(wizytyTable.getValueAt(wizytyTable.getSelectedRow(), wizytyTable.getSelectedColumn()));
+					dialog = new Visit_details_GUI(wizytyTable.getValueAt(wizytyTable.getSelectedRow(), 0));
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch(VisitNotSelectedException ex)
@@ -187,13 +204,155 @@ public class Karta_GUI extends JFrame {
 		});
 		wizyty_przyciski.add(btnSzczegy);
 		
-		JButton btnDodaj = new JButton("Dodaj");
+		JButton btnDodaj = new JButton("Rezerwuj termin");
+		btnDodaj.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Rezerwuj_GUI dialog = new Rezerwuj_GUI(karta);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.addWindowListener(new WindowAdapter() {
+					    public void windowClosed(WindowEvent we) {
+					    	System.out.println("Zamykam rezerwacje");
+					    	tableModel.fireTableDataChanged();
+					    }
+					});
+					dialog.setVisible(true);
+				} catch (Exception exe) {
+					exe.printStackTrace();
+				}
+			}
+		});
 		wizyty_przyciski.add(btnDodaj);
 		
-		JButton btnEdytuj = new JButton("Edytuj");
+		JButton btnEdytuj = new JButton("Potwierdź");
+		btnEdytuj.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Visit_details_GUI dialog = null;
+					if(wizytyTable.getSelectedRow() == -1 || wizytyTable.getSelectedColumn() == -1)
+					{
+						throw new VisitNotSelectedException();
+					}
+					Wizyta tr = (Wizyta) wizytyTable.getValueAt(wizytyTable.getSelectedRow(), 0);
+					tr.setPotwierdzona(true);
+					tableModel.fireTableDataChanged();
+					
+				} catch(VisitNotSelectedException ex)
+				{
+					try {
+						alert_ok dialog = new alert_ok("Wybierz wizytę w tabeli");
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				catch(Exception exc)
+				{
+					exc.printStackTrace();
+				}
+			}
+		});
 		wizyty_przyciski.add(btnEdytuj);
 		
 		JButton btnUsu = new JButton("Usuń");
+		btnUsu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Visit_details_GUI dialog = null;
+					if(wizytyTable.getSelectedRow() == -1 || wizytyTable.getSelectedColumn() == -1)
+					{
+						throw new VisitNotSelectedException();
+					}
+					Wizyta tr = (Wizyta) wizytyTable.getValueAt(wizytyTable.getSelectedRow(), 0);
+					int index = karta.listaWizyt.indexOf(tr);
+					if(index >= 0) karta.listaWizyt.remove(index);
+					tr = null;
+					tableModel.fireTableDataChanged();
+					
+				} catch(VisitNotSelectedException ex)
+				{
+					try {
+						alert_ok dialog = new alert_ok("Wybierz wizytę w tabeli");
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				catch(Exception exc)
+				{
+					exc.printStackTrace();
+				}
+			}
+		});
+		
+		JButton btnOdbyaSi = new JButton("Odbyła się");
+		btnOdbyaSi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Visit_details_GUI dialog = null;
+					if(wizytyTable.getSelectedRow() == -1 || wizytyTable.getSelectedColumn() == -1)
+					{
+						throw new VisitNotSelectedException();
+					}
+					Wizyta tr = (Wizyta) wizytyTable.getValueAt(wizytyTable.getSelectedRow(), 0);
+					tr.setOdbyta(true);
+					tableModel.fireTableDataChanged();
+					
+				} catch(VisitNotSelectedException ex)
+				{
+					try {
+						alert_ok dialog = new alert_ok("Wybierz wizytę w tabeli");
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				catch(Exception exc)
+				{
+					exc.printStackTrace();
+				}
+			}
+		});
+		wizyty_przyciski.add(btnOdbyaSi);
+		
+		JButton btnEdytuj_1 = new JButton("Edytuj");
+		btnEdytuj_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(wizytyTable.getSelectedRow() == -1 || wizytyTable.getSelectedColumn() == -1)
+					{
+						throw new VisitNotSelectedException();
+					}
+					Wizyta tr = (Wizyta) wizytyTable.getValueAt(wizytyTable.getSelectedRow(), 0);
+					EditVisit_GUI dialog = new EditVisit_GUI(tr);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.addWindowListener(new WindowAdapter() {
+					    public void windowClosed(WindowEvent we) {
+					    	System.out.println("Zamykam edycje");
+					    	tableModel.fireTableDataChanged();
+					    }
+					});
+					dialog.setVisible(true);
+				}
+				catch(VisitNotSelectedException ex)
+				{
+					try {
+						alert_ok dialog = new alert_ok("Wybierz wizytę w tabeli");
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setVisible(true);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				catch (Exception e21) {
+					e21.printStackTrace();
+				}
+			}
+		});
+		wizyty_przyciski.add(btnEdytuj_1);
 		wizyty_przyciski.add(btnUsu);
 		
 		JPanel choroby = new JPanel();

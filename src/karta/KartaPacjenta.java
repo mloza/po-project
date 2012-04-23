@@ -36,16 +36,28 @@ public class KartaPacjenta implements Serializable {
 	public void CreateVisits() {
 		Wizyta w1 = new Wizyta();
 		GregorianCalendar asd = (GregorianCalendar) Calendar.getInstance();
-		asd.set(2012, 4, 29);
+		asd.set(2012, 4, 15);
 		w1.setDateOfVisit(asd);
+		w1.setOdbyta(true);
+		w1.setPotwierdzona(true);
 		listaWizyt.add(w1);
+		
+		w1 = new Wizyta();
+		asd = (GregorianCalendar) Calendar.getInstance();
+		asd.set(2012, 4, 20);
+		w1.setDateOfVisit(asd);
+		w1.setOdbyta(true);
+		w1.setPotwierdzona(true);
+		w1.Init();
+		listaWizyt.add(w1);
+		
 		w1 = new Wizyta();
 		asd = (GregorianCalendar) Calendar.getInstance();
 		asd.set(2012, 5, 7);
 		w1.setDateOfVisit(asd);
-		
+		//w1.setOdbyta(true);
+		//w1.setPotwierdzona(true);
 		w1.Init();
-		
 		listaWizyt.add(w1);
 	}
 

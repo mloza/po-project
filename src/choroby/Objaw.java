@@ -84,11 +84,21 @@ public class Objaw implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
+	public boolean equals(Object obj) {
+		if(obj instanceof String && ((String) obj).contentEquals(this.getNazwa())) return true;
+		else if(obj instanceof Objaw && ((Objaw) obj).getNazwa().contentEquals(this.getNazwa())) return true;
+		else return false;
+	}
+
 	public String getNazwa() {
 		return nazwa;
 	}
 
 	public void setNazwa(String nazwa) {
 		this.nazwa = nazwa;
+	}
+
+	public static List<Objaw> getAll() {
+		return objawy;
 	}
 }

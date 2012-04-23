@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import ciphers.Cipher;
 
+
 /**
  * Wszystko co potrzebne jest w mainie, jeżeli obiekt ma być odtworzony i przy odtwarzaniu ma być uruchomiony konstruktor to implementujemy interfejs Externalizable i dodajemy metody writeExternal i readExternal tak jak tutaj
  * Jeżeli konstruktor ma być pominięty to serializable i metody readObject i writeObject. Jeśli ma być bez szyfrowania itp można te motody pominąć przy serializable.

@@ -139,7 +139,7 @@ public class Visit_details_GUI extends JDialog {
 			contentPanel.add(lblPrzepisaneLeki, gbc_lblPrzepisaneLeki);
 		}
 		{
-			JLabel label = new JLabel("<dynamic drugs>");
+			JLabel label = new JLabel(wizyta.getLekiString());
 			GridBagConstraints gbc_label = new GridBagConstraints();
 			gbc_label.anchor = GridBagConstraints.NORTHWEST;
 			gbc_label.insets = new Insets(0, 0, 5, 0);
