@@ -4,26 +4,20 @@ import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.SpringLayout;
 
-import karta.KartaPacjenta;
-
-import choroby.Choroba;
-
-import run.Main;
-
-import ludzie.*;
+import ludzie.Pacjent;
+import ludzie.PatientCardNotExistsException;
+import ludzie.Person;
 
 public class Test {
 
@@ -35,12 +29,12 @@ public class Test {
 		ludzie = new ArrayList<Person>();
 		Calendar cal = Calendar.getInstance();
 		cal.set(1990, 1, 8);
-		Pacjent pacjent = new Pacjent("Jan", "Kowalski", cal.getTime());
+		Pacjent pacjent = new Pacjent("p2","p2","Jan", "Kowalski", cal.getTime());
 		ludzie.add(pacjent);
 		cal.set(1995, 1, 20);
 		
 		// Jego strata że wszedł właśnie na gg
-		pacjent = new Pacjent("Piotr", "Betlej", cal.getTime());
+		pacjent = new Pacjent("p","p","Piotr", "Betlej", cal.getTime());
 		
 		pacjent.createCardWithVisit();
 		ludzie.add(pacjent);
