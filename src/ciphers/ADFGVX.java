@@ -194,86 +194,77 @@ public class ADFGVX
 	}
 
 	/**
-	 * For both coding and decoding returns an array of char of the message to
-	 * code/decode The boolean coding is true for encoding and false for
-	 * decoding Returns an empty array if the key is not valid
+	 * Dla zarówno kodowania i dekodowania zwraca listę znaków wiadomości do zakodowania/zdekodowania.
+	 * boolean coding jest ustawiona na prawde dla  kodowania i fałsz dla dekodowania. Zwraca pustą listę gdy klucz nie jest ok
 	 */
 	private char[] msgToProcess(String str, boolean coding) {
-		// if message is null return nothing
+		// jesli pusta wiadomosc zwroc pusta tablice
 		if (str == null)
 			return new char[0];
-		// if I do not have a valid key return
+		// jesli nie mam dobreo klucza tez
 		if (key.length() == 0)
 			return new char[0];
-		// keep only valid characters that we will stored in a StringBuilder
 		StringBuilder sb = new StringBuilder(key.length());
-		// convert to uppercase
+		// zamien na duze litery
 		char[] digit = str.toUpperCase().toCharArray();
-		// pass through each digit
+		//przejdz przez kazda cyfre
 		for (char c : digit) {
 			if (coding) {
-				// if encoding if a letter or a digit add it
 				if ((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
 					sb.append(c);
 			} else {
-				// when decoding only the morse letters are permitted
+				// podczas dekodowania tylko litery z morsa sa dozwolone
 				for (char m : morse) {
-					// if letter contained in morse letters
 					if (m == c) {
 						sb.append(c);
-						break; // no need to continue loop in the morse
-								// permitted letters
+						break; // nie ma potrzeby aby kontynuowac dla liter morsa
+							
 					}
 				}
 			}
 		}
-		// have digit to now be an array of just the valid character
 		digit = sb.toString().toCharArray();
-		// if empty return it
+		// jesli pusty zwroc
 		if (digit.length == 0)
 			return digit;
-		// when decoding the number of letter must be even
+		// podczas dekodowania ilosc liter musi byc rowna
 		if (!coding) {
 			if (digit.length % 2 != 0)
 				return new char[0];
 		}
-		// return the array of letters to process
+		// zwroc liste litter do procesu
 		return digit;
 	}
 
 	/**
-	 * Prepare/initialize the col and colAlpha objects
+	 *przygotowanie i inicjalizacja the col i colAlpha 
 	 */
 	private void prepareColumns(int len) {
-		// calculate the number of letters that will be in each column
+		// policz ilosc litter ktore beda w kazdej kolumnie
 		int nbPerCol = len / col.length;
-		// make an array of these length
+		// zwrob liste z tymi dlugosciami
 		int[] nb = new int[col.length];
 		for (int i = 0; i < col.length; i++)
 			nb[i] = nbPerCol;
-		// now if the message length is not an exact multiple of the message
-		// length
-		// the first columns will have one more row
+		
 		int reminder = len - (col.length * nbPerCol);
 		for (int i = 0; i < reminder; i++)
 			nb[i]++;
 
-		// we can now set the size of each of our column object
+		// teraz ustawiamy wielkosc kazdej kolumny naszego obiektu
 		for (int i = 0; i < col.length; i++) {
 			col[i].setSize(nb[i]);
 		}
 	}
 
 	/**
-	 * Find the position of the character in the grid the X and Y position will
-	 * be index in the Morse array to find the ADFGVX letters to use to
-	 * represent that digit
+	 * Znajdz pozycje znaku w gridzie x,y
 	 */
 	private Point findPos(char c) {
-		// scan the Grid
+		// skanuj grida
 		for (int x = 0; x < 6; x++) {
 			for (int y = 0; y < 6; y++) {
-				// if match return the coords
+				// jesli pasuje zwroc x i y
 				if (c == grid[x][y])
 					return new Point(x, y);
 			}
@@ -282,38 +273,35 @@ public class ADFGVX
 	}
 
 	/**
-	 * For debug purpose a method to display the Grid
+	 * Dla debugowania
 	 */
 	public void dumpGrid() {
-		// header
+		// naglowek
 		System.out.println("      GRID");
 		System.out.println();
-		// gap before printing A D F G V X
+		// odstep do wydruku A D F G V X
 		System.out.print("    ");
-		// the letters A D F G V X
+		// literki A D F G V X
 		for (int i = 0; i < morse.length; i++)
 			System.out.print(" " + morse[i]);
 		System.out.println();
-		// +---------- under the A D F G V X at the top
+
 		System.out.print("  +--");
 		for (int i = 0; i < morse.length; i++)
 			System.out.print("--");
 		System.out.println();
-		// now the different row
+		// reraz inny wiersz
 		for (int i = 0; i < morse.length; i++) {
-			// the letter at the beginning of the row
 			System.out.print(morse[i] + " | ");
-			// the Grid contents for that line
 			for (int j = 0; j < morse.length; j++) {
 				System.out.print(" " + grid[i][j]);
 			}
-			// ready for next line
 			System.out.println();
 		}
 	}
 
 	/**
-	 * For the GUI
+	 * Dla GUI
 	 */
 	public char[][] getGrid() {
 		return grid;
@@ -324,70 +312,66 @@ public class ADFGVX
 	}
 
 	/**
-	 * To test the class
+	 * Aby wytestowac
 	 */
 
 	/**
-	 * An internal class to hold the data (the character of each column) it
-	 * implements comparable so the column could be sorted by alpahbetical order
+	 *wewnetrzna klasa aby trzymac dane
+
 	 */
 	private class Column implements Comparable<Column> {
 
-		// the letter A D F G V X at the head of the column
+		// literki  A D F G V X na szczycie kolumny
 		private char header;
-		// all the letters in the column
+		// wszystkie w kolumnie
 		private char[] letters;
-		// use when we cumulate the digits in the letters array
 		private int index;
 
 		/**
-		 * Constructor that receives the letter as header
+		 * konstruktor otrzymujacy literke jako naglowek
 		 */
 		Column(char header) {
 			this.header = header;
 		}
 
 		/**
-		 * To set the number of elements in the column
+		 * aby ustalic ilosc w kol
 		 */
 		void setSize(int size) {
-			// build array to receive all elements
 			letters = new char[size];
-			// reset that we are at element 0
 			index = 0;
 		}
 
 		/**
-		 * To return, while decoding, the number of characters to insert in the
-		 * Column
+		 * odzyskanie wielkosci
 		 */
 		int getSize() {
 			return letters.length;
 		}
 
 		/**
-		 * To add a letter to the column
+		 * Aby dodac litere do kolumny
 		 */
 		void add(char c) {
 			letters[index++] = c;
 		}
 
 		/**
-		 * To get a single letter
+		 * Aby otrzymac pojedyncza litere
 		 */
 		char getChar(int n) {
 			return letters[n];
 		}
 
 		/**
-		 * To return as a String the letters in the column
+		 * Żeby zwrocic jako string litery
 		 */
 		public String toString() {
 			return new String(letters);
 		}
 
 		/**
-		 * To sort the columns by header
+		 * aby posortowac po naglowku
 		 */
 		public int compareTo(Column other) {
 			return header - other.header;

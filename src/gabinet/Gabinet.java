@@ -69,6 +69,7 @@ public class Gabinet {
 		}
 	}
 
+
 	public void setTypGabinetu(String typGabinetu) {
 		this.typGabinetu = typGabinetu;
 	}
@@ -80,6 +81,7 @@ public class Gabinet {
 	public String getTypOswietlenia() {
 		return typOswietlenia;
 	}
+
 
 	public void setTypOswietlenia(String typOswietlenia) {
 		this.typOswietlenia = typOswietlenia;

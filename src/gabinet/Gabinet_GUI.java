@@ -19,10 +19,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
+
 
 public class Gabinet_GUI implements Serializable {
 
@@ -131,6 +133,9 @@ public class Gabinet_GUI implements Serializable {
 		//table.setModel(new DefaultTableModel(namesOfColumns,5));
 		scrollPane.setViewportView(table);
 		
+		final JTextField lblOczekiwanie = new JTextField("Stan OK");
+		przegladanie.add(lblOczekiwanie, BorderLayout.SOUTH);
+		
 		final JPanel panel_przyciski = new JPanel();
 		FlowLayout fl_panel_przyciski = (FlowLayout) panel_przyciski.getLayout();
 		fl_panel_przyciski.setAlignment(FlowLayout.RIGHT);
@@ -141,8 +146,7 @@ public class Gabinet_GUI implements Serializable {
 		
 		final JMenu mnGabinet = new JMenu("Zarządzanie Gabinetem");
 		menuBar.add(mnGabinet);
-		
-		
+				
 		JMenuItem mntmWyjdz = new JMenuItem("Wyjdź");
 		mntmWyjdz.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -154,15 +158,17 @@ public class Gabinet_GUI implements Serializable {
 		mntmNewGabinet.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				lblOczekiwanie.setText("Zapisano!");
 			}
 		});
 		mnGabinet.add(mntmNewGabinet);
-		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Usuń Gabinet");
 		mnGabinet.add(mntmNewMenuItem_1);
 		mnGabinet.add(mntmWyjdz);
+		
+		}
 	}
 
-	}
+	
 
 

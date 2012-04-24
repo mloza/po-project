@@ -2,8 +2,10 @@ package ludzie;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -19,11 +21,17 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.JList;
+import javax.swing.JTextPane;
+import javax.swing.JTable;
 
 public class Nurse extends Person implements worker{
 
 	private JFrame frame;
-	List<Person> ludzie;
+	private String[] columnNames = {"Imie", "Nazwisko"};
+	List<Pacjent> ludzie2 = null;
+	Object[][] data;
+	//List<Person> ludzie;
 		private String login;
 		Occupation type = Occupation.DOCTOR;
 		private JTextField textField;
@@ -31,11 +39,38 @@ public class Nurse extends Person implements worker{
 		private JTextField textField_1;
 		private JTextField textField_2;
 		private JTextField textField_3;
+		private JTable table;
 		
 		public Nurse(String login, String name, String surname,
 				Date birthDate) {
 			super(name, surname, birthDate);
 			this.setLogin(login);
+			
+			try {
+				System.out.println("Wczytuję");
+				ObjectInputStream op = new ObjectInputStream(
+						new FileInputStream("data/ludzie.txt"));
+				ludzie2 = (ArrayList<Pacjent>) op.readObject();
+			} catch (Exception e) {
+				System.out.println("Nie wczytałem");
+				e.printStackTrace();
+			} finally {
+				ObjectOutputStream op;
+				try {
+					op = new ObjectOutputStream(
+							new FileOutputStream("data/ludzie.txt"));
+					op.writeObject(ludzie2);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+			data = new Object [ludzie2.size()+1][2];
+			
+			for (int i=0; i<ludzie2.size();i++) {
+				data[i][0]=ludzie2.get(i).getName();
+				data[i][1]=ludzie2.get(i).getSurname();
+			}
+			
 			initialize();
 			
 		}
@@ -56,6 +91,8 @@ public class Nurse extends Person implements worker{
 
 		}
 
+
+		
 	private void initialize() {
 		frame = new JFrame("Pielegniarka");
 		frame.setBounds(100, 100, 450, 300);
@@ -138,14 +175,38 @@ public class Nurse extends Person implements worker{
 		sl_panel.putConstraint(SpringLayout.EAST, btnWczytaj, -119, SpringLayout.EAST, panel);
 		panel.add(btnWczytaj);
 		
+		table = new JTable(data,columnNames);
+		sl_panel.putConstraint(SpringLayout.NORTH, table, 0, SpringLayout.NORTH, textField);
+		sl_panel.putConstraint(SpringLayout.WEST, table, 6, SpringLayout.EAST, textField);
+		sl_panel.putConstraint(SpringLayout.SOUTH, table, 0, SpringLayout.SOUTH, textField_3);
+		sl_panel.putConstraint(SpringLayout.EAST, table, 306, SpringLayout.EAST, textField);
+		panel.add(table);
+		
 		btnStworz.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("klik");
+				ArrayList<Pacjent> ludzie=null;
+				try {
+					System.out.println("Wczytuję");
+					ObjectInputStream op = new ObjectInputStream(
+							new FileInputStream("data/ludzie.txt"));
+					ludzie = (ArrayList<Pacjent>) op.readObject();
+				} catch (Exception e1) {
+					System.out.println("Nie wczytałem");
+					e1.printStackTrace();
+				} finally {
+					ObjectOutputStream op;
+					try {
+						op = new ObjectOutputStream(
+								new FileOutputStream("data/ludzie.txt"));
+						op.writeObject(ludzie);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 				
-				ludzie = new ArrayList<Person>();
-
 				String pass = new String(passwordField.getPassword());
 				DateFormat f = new SimpleDateFormat("dd-MM-yyyy");
 				Date dat = null;
@@ -154,11 +215,11 @@ public class Nurse extends Person implements worker{
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
+				String[] s = {textField.getText(), textField_1.getText(), textField_2.getText()};
+				if(s[1].length() != 0 && s[2].length() != 0 && s[3].length() != 0 ){
 				Pacjent pacjent = new Pacjent(textField.getText(),pass,textField_1.getText(), textField_2.getText(), dat);
-				pacjent.createCardWithVisit();
 				ludzie.add(pacjent);
 				System.out.println("Tworzę");
-				
 				ObjectOutputStream op;
 				try {
 					op = new ObjectOutputStream(new FileOutputStream("data/ludzie.txt"));
@@ -167,9 +228,27 @@ public class Nurse extends Person implements worker{
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+				}
+				else {
+					System.out.println("Nie mozna zapisywac!");
+				}
 			}
 		});
 		
+		
+		btnWczytaj.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int index = table.getSelectedRow();
+				try {
+					ludzie2.get(index).showCard();
+				} catch (PatientCardNotExistsException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
 		frame.setVisible(true);
 	}
 }
