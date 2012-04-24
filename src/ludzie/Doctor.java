@@ -1,5 +1,7 @@
 package ludzie;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 
@@ -88,6 +90,23 @@ public class Doctor extends Person {
 		frame.pack();
 		frame.setVisible(true);
 		
+		final JButton btnPoka = new JButton("Wyswietl");
+		 frame.add(btnPoka);
+		
+		 
+		 btnPoka.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int index = table.getSelectedRow();
+					try {
+						ludzie.get(index).showCard();
+					} catch (PatientCardNotExistsException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				}
+			});
 
 	}
 }

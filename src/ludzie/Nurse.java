@@ -2,8 +2,10 @@ package ludzie;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,7 +25,7 @@ import javax.swing.SpringLayout;
 public class Nurse extends Person implements worker{
 
 	private JFrame frame;
-	List<Person> ludzie;
+	//List<Person> ludzie;
 		private String login;
 		Occupation type = Occupation.DOCTOR;
 		private JTextField textField;
@@ -56,6 +58,8 @@ public class Nurse extends Person implements worker{
 
 		}
 
+
+		
 	private void initialize() {
 		frame = new JFrame("Pielegniarka");
 		frame.setBounds(100, 100, 450, 300);
@@ -143,9 +147,26 @@ public class Nurse extends Person implements worker{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("klik");
+				ArrayList<Pacjent> ludzie=null;
+				try {
+					System.out.println("Wczytuję");
+					ObjectInputStream op = new ObjectInputStream(
+							new FileInputStream("data/ludzie.txt"));
+					ludzie = (ArrayList<Pacjent>) op.readObject();
+				} catch (Exception e1) {
+					System.out.println("Nie wczytałem");
+					e1.printStackTrace();
+				} finally {
+					ObjectOutputStream op;
+					try {
+						op = new ObjectOutputStream(
+								new FileOutputStream("data/ludzie.txt"));
+						op.writeObject(ludzie);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 				
-				ludzie = new ArrayList<Person>();
-
 				String pass = new String(passwordField.getPassword());
 				DateFormat f = new SimpleDateFormat("dd-MM-yyyy");
 				Date dat = null;
@@ -155,10 +176,8 @@ public class Nurse extends Person implements worker{
 					e1.printStackTrace();
 				}
 				Pacjent pacjent = new Pacjent(textField.getText(),pass,textField_1.getText(), textField_2.getText(), dat);
-				pacjent.createCardWithVisit();
 				ludzie.add(pacjent);
 				System.out.println("Tworzę");
-				
 				ObjectOutputStream op;
 				try {
 					op = new ObjectOutputStream(new FileOutputStream("data/ludzie.txt"));
@@ -167,9 +186,11 @@ public class Nurse extends Person implements worker{
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+				
 			}
 		});
 		
 		frame.setVisible(true);
 	}
+	
 }
