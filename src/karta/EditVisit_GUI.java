@@ -30,6 +30,7 @@ import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 
 import choroby.Objaw;
+import choroby.Objawy_interface;
 
 public class EditVisit_GUI extends JDialog {
 
@@ -57,7 +58,7 @@ public class EditVisit_GUI extends JDialog {
 			this.visit = visit;
 
 			List<String> o = new ArrayList<String>();
-			for (Objaw i : Objaw.getAll()) {
+			for (Objawy_interface i : Objaw.getAll()) {
 				o.add(i.getNazwa());
 			}
 			values = o.toArray();
@@ -68,7 +69,7 @@ public class EditVisit_GUI extends JDialog {
 			int[] l = new int[visit.objawy.size()];
 			int i = 0;
 			int f = -1;
-			for (Objaw in : visit.objawy) {
+			for (Objawy_interface in : visit.objawy) {
 				// System.out.println(objawy.indexOf(i));
 
 				if ((f = objawy.indexOf(in)) != -1) {

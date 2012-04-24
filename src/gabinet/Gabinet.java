@@ -1,58 +1,92 @@
 package gabinet;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+import ciphers.Cipher;
 
 public class Gabinet {
-String typGabinetu;
-String typOswietlenia;
-ArrayList<Wyposazenie> jakieWyposazenie = new ArrayList<Wyposazenie>();
+	private String typGabinetu = "Standardowy";
+	private String typOswietlenia = "Standardowy";
+	private Cipher ciph = Cipher.ADFGVC;
+	private static String sep = "$";
+	static ArrayList<Gabinet> gabinety = new ArrayList<Gabinet>();
 
+	static {
+		try {
+			BufferedReader plik = new BufferedReader(new FileReader(
+					"data/gabinety.txt"));
+			String linia;
+			while ((linia = plik.readLine()) != null) {
+				Gabinet gab = new Gabinet();
+				String[] values = linia.split(Pattern.quote(sep));
+				gab.setTypGabinetu(values[0]);
+				gab.setTypOswietlenia(values[1]);
+				gabinety.add(gab);
+			}
+			System.out.println("---");
+		} catch (FileNotFoundException e) {
+			try {
+				BufferedWriter plik = new BufferedWriter(new FileWriter(
+						"data/gabinety.txt"));
+				String save = "";
+				Gabinet gab = new Gabinet();
+				gab.setTypGabinetu("Standardowy");
+				gab.setTypOswietlenia("Oświetlenie ogólne");
+				save += gab.getTypGabinetu() + sep + gab.getTypOswietlenia()
+						+ "\n";
+				gab = new Gabinet();
+				gab.setTypGabinetu("Zabiegowy");
+				gab.setTypOswietlenia("Oświetlenie złożone");
+				save += gab.getTypGabinetu() + sep + gab.getTypOswietlenia()
+						+ "\n";
+				gab = new Gabinet();
+				gab.setTypGabinetu("Operacyjny");
+				gab.setTypOswietlenia("Oświetlenie złożone oraz Lampy Operacyjne");
+				save += gab.getTypGabinetu() + sep + gab.getTypOswietlenia()
+						+ "\n";
+				gab = new Gabinet();
+				gab.setTypGabinetu("Okulistyczny");
+				gab.setTypOswietlenia("Oświetlenie szczelinowe");
+				save += gab.getTypGabinetu() + sep + gab.getTypOswietlenia()
+						+ "\n";
+				plik.append(save);
+				plik.close();
+			} catch (IOException e1) {
+				System.out.println("Nie Bangla");
+				System.exit(1010);
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-Gabinet(String typGabinetu, String typOswietlenia, WyposazeniePodstawowe jakiePodstawowe, WyposazenieDodatkowe jakieDodatkowe){
-	this.typGabinetu = typGabinetu;
-    this.typOswietlenia = typOswietlenia;
-}
+	public void setTypGabinetu(String typGabinetu) {
+		this.typGabinetu = typGabinetu;
+	}
 
-}
-interface Wyposazenie {
-	public void zwiekszIlosc();
-	public void zmniejszIlosc();
-}
-enum WyposazenieDodatkowe implements Wyposazenie {
-	APARAT_EEG("Aparat_EEG", 1), APARAT_KTG("Aparat_KTG", 1), AUTOKLAW("Autoklaw", 1), BIOPTRON("Bioptron", 1), CPAP("Cpap", 1), HOLTER("Holter", 1), CYKLOERGOMETR("Cykloergometr", 1),  KRIOKOMORA("Kriokomora", 1),  LAMPA_SZCZELINOWA("Lampa_Szczelinowa", 1); 
-	String nazwa;
-	int ilosc;
-	WyposazenieDodatkowe(String nazwa, int ilosc){
-		this.nazwa = nazwa;
-		this.ilosc = ilosc;
+	public String getTypGabinetu() {
+		return typGabinetu;
 	}
-	@Override
-	public void zwiekszIlosc() {
-		ilosc++;
-		
+
+	public String getTypOswietlenia() {
+		return typOswietlenia;
 	}
-	@Override
-	public void zmniejszIlosc() {
-		ilosc--;
-		
+
+	public void setTypOswietlenia(String typOswietlenia) {
+		this.typOswietlenia = typOswietlenia;
 	}
-}
-enum WyposazeniePodstawowe implements Wyposazenie {
-	STOL("Stol", 1), STETOSKOP("Stetoskop", 1), KRZESLO("Krzeslo", 1), SZAFKA("Szafka", 1);
-	String nazwa;
-	int ilosc;
-	WyposazeniePodstawowe(String nazwa, int ilosc){
-		this.nazwa = nazwa;
-		this.ilosc = ilosc;
+
+	public Object getSprzetString() {
+		return "Brak";
 	}
-	@Override
-	public void zwiekszIlosc() {
-		ilosc++;
-		
-	}
-	@Override
-	public void zmniejszIlosc() {
-		ilosc--;
-		
-	}
+
 }

@@ -34,7 +34,7 @@ public class Test {
 		cal.set(1995, 1, 20);
 		
 		// Jego strata że wszedł właśnie na gg
-		pacjent = new Pacjent("p","p","Piotr", "Betlej", cal.getTime());
+		pacjent = new Pacjent("puk","stuk","Piotr", "Betlej", cal.getTime());
 		
 		pacjent.createCardWithVisit();
 		ludzie.add(pacjent);

@@ -1,11 +1,12 @@
 package ludzie;
 
+import java.awt.EventQueue;
 import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
-
+import gabinet.*;
 public class Superciec extends Person implements worker{
 
 	private JFrame frame;
@@ -37,6 +38,7 @@ public class Superciec extends Person implements worker{
 		}
 
 	private void initialize() {
+		/*
 		frame = new JFrame("Superciec");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,5 +52,22 @@ public class Superciec extends Person implements worker{
 		springLayout.putConstraint(SpringLayout.EAST, panel, 430, SpringLayout.WEST, frame.getContentPane());
 		frame.getContentPane().add(panel);
 		frame.setVisible(true);
+		*/
+		new Gabinet_GUI();
+		
+	}
+	@SuppressWarnings("deprecation")
+	public static void main(String[] args){
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Gabinet_GUI window = new Gabinet_GUI();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
 	}
 }
