@@ -53,7 +53,8 @@ public class Superciec extends Person implements worker{
 		frame.getContentPane().add(panel);
 		frame.setVisible(true);
 		*/
-		new Gabinet_GUI();
+		Gabinet_GUI window = new Gabinet_GUI();
+		window.frame.setVisible(true);
 		
 	}
 	@SuppressWarnings("deprecation")
