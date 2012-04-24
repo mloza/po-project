@@ -49,7 +49,7 @@ public class Login {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JRadioButton rdbtnPracownik;
 	private JRadioButton rdbtnPacjent;
-	public static Person logIn;
+	private static Person logIn;
 
 	private Cipher ciph = Cipher.ADFGVC;
 
@@ -94,7 +94,7 @@ public class Login {
 								Administrator login = new Administrator(
 										search.get(0), search.get(3),
 										search.get(4), data);
-								logIn = login;
+								setLogIn(login);
 								System.out.println("admin");
 								login.run();
 							} else if (search.get("TYPE").equals("Lekarz")) {
@@ -102,7 +102,7 @@ public class Login {
 								data = (Date) f.parse(search.get(5));
 								Doctor login = new Doctor(search.get(0),
 										search.get(3), search.get(4), data);
-								logIn = login;
+								setLogIn(login);
 								System.out.println("lekarz");
 								login.run();
 							} else if (search.get("TYPE")
@@ -111,7 +111,7 @@ public class Login {
 								data = (Date) f.parse(search.get(5));
 								Nurse login = new Nurse(search.get(0),
 										search.get(3), search.get(4), data);
-								logIn = login;
+								setLogIn(login);
 								System.out.println("pigula");
 								login.run();
 							} else if (search.get("TYPE").equals("Superciec")) {
@@ -119,7 +119,7 @@ public class Login {
 								data = (Date) f.parse(search.get(5));
 								Superciec login = new Superciec(search.get(0),
 										search.get(3), search.get(4), data);
-								logIn = login;
+								setLogIn(login);
 								System.out.println("superciec");
 								login.run();
 							}
@@ -164,10 +164,9 @@ public class Login {
 				if (p.getLogin().equals(txt)) {
 					String ask = new String(pass);
 					if (p.getPass().equals(ask)) {
-						Pacjent login = new Pacjent(p.getLogin(), p.getPass(),
-								p.name, p.surname, p.getBirthDate());
+						Pacjent login = p;
 						frmLogowanie.dispose();
-						logIn = login;
+						setLogIn(login);
 						System.out.println("pacjent");
 						try {
 							login.showCard();
@@ -285,5 +284,13 @@ public class Login {
 
 			}
 		});
+	}
+
+	public static Person getLogIn() {
+		return logIn;
+	}
+
+	public static void setLogIn(Person logIn) {
+		Login.logIn = logIn;
 	}
 }

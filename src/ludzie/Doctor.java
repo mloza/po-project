@@ -1,24 +1,62 @@
 package ludzie;
+import java.awt.GridLayout;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SpringLayout;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 
 
 public class Doctor extends Person {
 
 	private JFrame frame;
-
-		private String login;
+	private String[] columnNames = {"Imie", "Nazwisko"};
+	List<Pacjent> ludzie = null;
+	Object[][] data;
+		
+			private String login;
 		Occupation type = Occupation.DOCTOR;
+		private JTable table;
 		
 		public Doctor(String login, String name, String surname,
 				Date birthDate) {
 			super(name, surname, birthDate);
 			
 			this.setLogin(login);
+			
+			
+			try {
+				System.out.println("Wczytuję");
+				ObjectInputStream op = new ObjectInputStream(
+						new FileInputStream("data/ludzie.txt"));
+				ludzie = (ArrayList<Pacjent>) op.readObject();
+			} catch (Exception e) {
+				System.out.println("Nie wczytałem");
+				e.printStackTrace();
+			} finally {
+				ObjectOutputStream op;
+				try {
+					op = new ObjectOutputStream(
+							new FileOutputStream("data/ludzie.txt"));
+					op.writeObject(ludzie);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+			data = new Object [ludzie.size()+1][2];
+			
+			for (int i=0; i<ludzie.size();i++) {
+				data[i][0]=ludzie.get(i).getName();
+				data[i][1]=ludzie.get(i).getSurname();
+			}
 			
 		}
 
@@ -33,26 +71,23 @@ public class Doctor extends Person {
 		/**
 		 * @wbp.parser.entryPoint
 		 */
+
 		public void run(){
 			initialize();
-			
-			
-			
+	
 		}
 
 	private void initialize() {
 		frame = new JFrame("Lekarz");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		SpringLayout springLayout = new SpringLayout();
-		frame.getContentPane().setLayout(springLayout);
+		frame.getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JPanel panel = new JPanel();
-		springLayout.putConstraint(SpringLayout.NORTH, panel, 0, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, panel, 0, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, panel, 250, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, panel, 430, SpringLayout.WEST, frame.getContentPane());
-		frame.getContentPane().add(panel);
+		table = new JTable(data,columnNames);
+		frame.getContentPane().add(table);
+		frame.pack();
 		frame.setVisible(true);
+		
+
 	}
 }
