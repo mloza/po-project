@@ -164,8 +164,8 @@ public class Login {
 				if (p.getLogin().equals(txt)) {
 					String ask = new String(pass);
 					if (p.getPass().equals(ask)) {
-						Pacjent login = new Pacjent(p.getLogin(), p.getPass(),
-								p.name, p.surname, p.getBirthDate());
+						Pacjent login = p;//new Pacjent(p.getLogin(), p.getPass(),
+								//p.name, p.surname, p.getBirthDate());
 						frmLogowanie.dispose();
 						logIn = login;
 						System.out.println("pacjent");
