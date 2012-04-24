@@ -65,14 +65,27 @@ static {
 	}
 }
 
-private void setTypGabinetu(String typGabinetu) {
+public void setTypGabinetu(String typGabinetu) {
 	this.typGabinetu = typGabinetu;
 }
-private String getTypGabinetu(){
+public String getTypGabinetu(){
 	return typGabinetu;
 }
-
-
+public void saveNew() throws IOException{
+	/*
+	BufferedWriter plik = new BufferedWriter(new FileWriter("data/gabinety.txt"));
+	String linia;
+	String save = "";
+	save += this.typGabinetu + sep + this.typOswietlenia + "\n";
+	
+	while((linia = plik.readline()) != null)
+	{
+		
+	}
+	plik.append(save);
+	plik.close();
+	*/
+}
 
 }
 

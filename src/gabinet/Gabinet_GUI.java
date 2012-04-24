@@ -12,13 +12,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JLabel;
 
 public class Gabinet_GUI {
 
@@ -91,6 +95,9 @@ public class Gabinet_GUI {
 		});
 		scrollPane.setViewportView(table);
 		
+		final JTextField lblOczekiwanie = new JTextField("Stan OK");
+		przegladanie.add(lblOczekiwanie, BorderLayout.SOUTH);
+		
 		final JPanel panel_przyciski = new JPanel();
 		FlowLayout fl_panel_przyciski = (FlowLayout) panel_przyciski.getLayout();
 		fl_panel_przyciski.setAlignment(FlowLayout.RIGHT);
@@ -104,9 +111,8 @@ public class Gabinet_GUI {
 		
 		final JMenuItem mntmZapisz = new JMenuItem("Zapisz");
 		mntmZapisz.addMouseListener(new MouseAdapter() {
-			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				lblOczekiwanie.setText("Zapisano!");
 			}
 		});
 		mnGabinet.add(mntmZapisz);
@@ -123,15 +129,17 @@ public class Gabinet_GUI {
 		mntmNewGabinet.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				lblOczekiwanie.setText("Zapisano!");
 			}
 		});
 		mnGabinet.add(mntmNewGabinet);
-		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Usuń Gabinet");
 		mnGabinet.add(mntmNewMenuItem_1);
 		mnGabinet.add(mntmWyjdz);
+		
+		}
 	}
 
-	}
+	
 
 
