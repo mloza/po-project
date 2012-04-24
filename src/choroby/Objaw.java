@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 import ciphers.Cipher;
 
-public class Objaw implements Serializable {
+public class Objaw implements Serializable, Objawy_interface {
 	
 	protected String nazwa = "Objaw";
 	static List<Objaw> objawy = new ArrayList<Objaw>();
@@ -86,14 +86,22 @@ public class Objaw implements Serializable {
 
 	public boolean equals(Object obj) {
 		if(obj instanceof String && ((String) obj).contentEquals(this.getNazwa())) return true;
-		else if(obj instanceof Objaw && ((Objaw) obj).getNazwa().contentEquals(this.getNazwa())) return true;
+		else if(obj instanceof Objaw && ((Objawy_interface) obj).getNazwa().contentEquals(this.getNazwa())) return true;
 		else return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see choroby.Objawy_interface#getNazwa()
+	 */
+	@Override
 	public String getNazwa() {
 		return nazwa;
 	}
 
+	/* (non-Javadoc)
+	 * @see choroby.Objawy_interface#setNazwa(java.lang.String)
+	 */
+	@Override
 	public void setNazwa(String nazwa) {
 		this.nazwa = nazwa;
 	}

@@ -1,10 +1,17 @@
 package gabinet;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -13,24 +20,72 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 
-import java.awt.CardLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JLabel;
 
-public class Gabinet_GUI {
+public class Gabinet_GUI implements Serializable {
 
 	public JFrame frame;
 	private JTable table;
+	private List<Gabinet> gabs = new ArrayList<Gabinet>();
 	/**
 	 * Launch the application.
 	 */
+	
+	class MyTModel extends AbstractTableModel implements TableModelListener {
+		private Object[][] data = {{"Standardowy", "Stół, Krzesło, Biurko, Stetoskop, Ciśnieniomierz" },
+				{"Zabiegowy","Skalpel, Aparat EKG, Tomograf, Ciśnieniomierz" },
+				{"Operacyjny", "Skalpel, Stół, Tomograf, Młoteczek Lekarski" }};
+		private Object[] columnNames = {"Typ Gabinetu", "Typ oświetlenia", "Sprzet w Gabinecie"};
+		
+		
+		@Override
+		public int getRowCount() {
+			return data.length;
+		}
+		
+		public String getColumnName(int col) {
+	        return (String) columnNames[col];
+	    }
+		
+		@Override
+		public int getColumnCount() {
+			return columnNames.length;
+		}
+
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			return data[rowIndex][columnIndex];
+		}
+		
+		public void Initiate() {
+
+		}
+		
+		public void tableChanged(TableModelEvent e)
+		{
+			this.Initiate();
+			table.repaint();
+		}
+
+		public void readData() {
+			Object[][] asd = new Object[Gabinet.gabinety.size()][this.getColumnCount()];
+			int i =0;
+			for(Gabinet it : Gabinet.gabinety)
+			{
+				//asd[i++][0] = date.format(it.getDate());
+				asd[i][0] = it.getTypGabinetu();
+				asd[i][1] = it.getTypOswietlenia();
+				asd[i++][2] = it.getSprzetString();
+
+			}
+			data = asd;
+		}
+	}
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -57,7 +112,7 @@ public class Gabinet_GUI {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 769, 568);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel zawartosc = new JPanel();
@@ -72,27 +127,10 @@ public class Gabinet_GUI {
 		JScrollPane scrollPane = new JScrollPane();
 		przegladanie.add(scrollPane, BorderLayout.CENTER);
 		String[] namesOfColumns = {"Typ Gabinetu", "Ilosc", "Sprzet w Gabinecie"};
-		table = new JTable();
+		MyTModel m = new MyTModel();
+		m.readData();
+		table = new JTable(m);
 		//table.setModel(new DefaultTableModel(namesOfColumns,5));
-		
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Standardowy", 5, "Stół, Krzesło, Biurko, Stetoskop, Ciśnieniomierz" },
-				{"Zabiegowy", 2, "Skalpel, Aparat EKG, Tomograf, Ciśnieniomierz" },
-				{"Operacyjny", 2, "Skalpel, Stół, Tomograf, Młoteczek Lekarski" },
-				{"", "" ,""},
-			},
-			new String[] {
-				"Typ Gabinetu", "Ilość", "Sprzet w Gabinecie", 
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				Object.class, Integer.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
 		scrollPane.setViewportView(table);
 		
 		final JTextField lblOczekiwanie = new JTextField("Stan OK");
@@ -108,20 +146,11 @@ public class Gabinet_GUI {
 		
 		final JMenu mnGabinet = new JMenu("Zarządzanie Gabinetem");
 		menuBar.add(mnGabinet);
-		
-		final JMenuItem mntmZapisz = new JMenuItem("Zapisz");
-		mntmZapisz.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				lblOczekiwanie.setText("Zapisano!");
-			}
-		});
-		mnGabinet.add(mntmZapisz);
-		
-		JMenuItem mntmWyjdz = new JMenuItem("Wyjdź");
-		mntmWyjdz.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
 				
+		JMenuItem mntmWyjdz = new JMenuItem("Wyjdź");
+		mntmWyjdz.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Gabinet_GUI.this.frame.dispose();
 			}
 		});
 		

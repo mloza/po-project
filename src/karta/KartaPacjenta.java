@@ -17,9 +17,6 @@ public class KartaPacjenta implements Serializable {
 		this.pacjent = pacjent;
 	}
 
-	public void printWpis(int i) {
-	}
-
 	public void show() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

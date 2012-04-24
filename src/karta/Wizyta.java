@@ -17,6 +17,7 @@ import leczenie.LekNotFoundException;
 import choroby.Choroba;
 import choroby.Objaw;
 import choroby.ObjawNotFoundException;
+import choroby.Objawy_interface;
 import choroby.SicknessNotFoundException;
 
 public class Wizyta implements Serializable {
@@ -147,7 +148,7 @@ public class Wizyta implements Serializable {
 	public String getObjawyString()
 	{
 		StringBuilder str = new StringBuilder();
-		for(Objaw i: objawy)
+		for(Objawy_interface i: objawy)
 		{
 			if(str.length() != 0) str.append(", ");
 			str.append(i.getNazwa());

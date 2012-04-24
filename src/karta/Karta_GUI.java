@@ -27,6 +27,12 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
+import ludzie.Doctor;
+import ludzie.Nurse;
+import ludzie.Pacjent;
+import ludzie.Person;
+import run.Login;
+
 public class Karta_GUI extends JFrame {
 	private JPanel contentPane;
 	private JTable wizytyTable;
@@ -84,8 +90,8 @@ public class Karta_GUI extends JFrame {
 		this.karta = kartap;
 		
 		final SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
-		
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		this.setTitle("Karta pacjenta");		
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 559, 383);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -204,58 +210,71 @@ public class Karta_GUI extends JFrame {
 		});
 		wizyty_przyciski.add(btnSzczegy);
 		
-		JButton btnDodaj = new JButton("Rezerwuj termin");
-		btnDodaj.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					Rezerwuj_GUI dialog = new Rezerwuj_GUI(karta);
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.addWindowListener(new WindowAdapter() {
-					    public void windowClosed(WindowEvent we) {
-					    	System.out.println("Zamykam rezerwacje");
-					    	tableModel.fireTableDataChanged();
-					    }
-					});
-					dialog.setVisible(true);
-				} catch (Exception exe) {
-					exe.printStackTrace();
-				}
-			}
-		});
-		wizyty_przyciski.add(btnDodaj);
+		final Person login = Login.getLogIn();
+		//final Person login = new Nurse("G", "g", "g", null);
 		
-		JButton btnEdytuj = new JButton("Potwierdź");
-		btnEdytuj.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					Visit_details_GUI dialog = null;
-					if(wizytyTable.getSelectedRow() == -1 || wizytyTable.getSelectedColumn() == -1)
-					{
-						throw new VisitNotSelectedException();
-					}
-					Wizyta tr = (Wizyta) wizytyTable.getValueAt(wizytyTable.getSelectedRow(), 0);
-					tr.setPotwierdzona(true);
-					tableModel.fireTableDataChanged();
-					
-				} catch(VisitNotSelectedException ex)
-				{
+		if(login instanceof Pacjent) {
+			JButton btnDodaj = new JButton("Rezerwuj termin");
+			btnDodaj.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
 					try {
-						alert_ok dialog = new alert_ok("Wybierz wizytę w tabeli");
+						Rezerwuj_GUI dialog = new Rezerwuj_GUI(karta);
 						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.addWindowListener(new WindowAdapter() {
+						    public void windowClosed(WindowEvent we) {
+						    	System.out.println("Zamykam rezerwacje");
+						    	tableModel.fireTableDataChanged();
+						    }
+						});
 						dialog.setVisible(true);
-					} catch (Exception e1) {
-						e1.printStackTrace();
+					} catch (Exception exe) {
+						exe.printStackTrace();
 					}
 				}
-				catch(Exception exc)
-				{
-					exc.printStackTrace();
-				}
-			}
-		});
-		wizyty_przyciski.add(btnEdytuj);
+			});
+			wizyty_przyciski.add(btnDodaj);
+		}
 		
-		JButton btnUsu = new JButton("Usuń");
+		if(login instanceof Nurse)
+		{
+			JButton btnEdytuj = new JButton("Potwierdź");
+			btnEdytuj.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						Visit_details_GUI dialog = null;
+						if(wizytyTable.getSelectedRow() == -1 || wizytyTable.getSelectedColumn() == -1)
+						{
+							throw new VisitNotSelectedException();
+						}
+						Wizyta tr = (Wizyta) wizytyTable.getValueAt(wizytyTable.getSelectedRow(), 0);
+						tr.setPotwierdzona(true);
+						tableModel.fireTableDataChanged();
+						
+					} catch(VisitNotSelectedException ex)
+					{
+						try {
+							alert_ok dialog = new alert_ok("Wybierz wizytę w tabeli");
+							dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+							dialog.setVisible(true);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					}
+					catch(Exception exc)
+					{
+						exc.printStackTrace();
+					}
+				}
+			});
+			wizyty_przyciski.add(btnEdytuj);
+		}
+		
+		JButton btnUsu = null;
+		if(login instanceof Pacjent) {
+			btnUsu = new JButton("Odwołaj");
+		} else {
+			btnUsu = new JButton("Usuń");
+		}
 		btnUsu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -265,11 +284,23 @@ public class Karta_GUI extends JFrame {
 						throw new VisitNotSelectedException();
 					}
 					Wizyta tr = (Wizyta) wizytyTable.getValueAt(wizytyTable.getSelectedRow(), 0);
-					int index = karta.listaWizyt.indexOf(tr);
-					if(index >= 0) karta.listaWizyt.remove(index);
-					tr = null;
-					tableModel.fireTableDataChanged();
-					
+					if(login instanceof Pacjent && tr.isOdbyta())
+					{
+							try {
+								alert_ok dialogy = new alert_ok("Nie możesz odwołać wizyt które się już odbyły");
+								dialogy.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+								dialogy.setVisible(true);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+					}
+					else 
+					{
+						int index = karta.listaWizyt.indexOf(tr);
+						if(index >= 0) karta.listaWizyt.remove(index);
+						tr = null;
+						tableModel.fireTableDataChanged();
+					}
 				} catch(VisitNotSelectedException ex)
 				{
 					try {
@@ -287,6 +318,7 @@ public class Karta_GUI extends JFrame {
 			}
 		});
 		
+		if(login instanceof Doctor) {
 		JButton btnOdbyaSi = new JButton("Odbyła się");
 		btnOdbyaSi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -353,6 +385,7 @@ public class Karta_GUI extends JFrame {
 			}
 		});
 		wizyty_przyciski.add(btnEdytuj_1);
+		}
 		wizyty_przyciski.add(btnUsu);
 		
 		JPanel choroby = new JPanel();
